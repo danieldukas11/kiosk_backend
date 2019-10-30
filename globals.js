@@ -1,0 +1,5 @@
+global.express=require("express");
+global.mongoose = require('mongoose');
+global.Schema = mongoose.Schema;
+global.ObjectId = mongoose.Schema.Types.ObjectId;
+global.JWTKey="m3lIgnqJJ6sybRotqHjQdglKrza7SKxO3RiO1vI43PA5q-yqoHWyQE4bntNFfvLQRWCqDvBRE2pRiETm3oHPvZY3vWhKlUiAGsTKHZBfMGFavxuUiYRoWbAshTYbbLE9MyQxcoy2ovAWPw7nIJAsLGF9Q9hkHlcylDFapFfRNBJwLpsaBp1V3yy297Hopjj8SQlOkqL_OdumkS7dxt33jKhmyM2K38iz-B-T8Qv0TeThC2WsxOBQjWT4FfHD_kMj8AUnAH9Vq-LgkdeMB5Lyo0THAROg1JYsDxZ2LwhLDvO8QMl7eSutqDfKC2Br-r-rAb65t0n08nl9S1BUVpBRHQ"
