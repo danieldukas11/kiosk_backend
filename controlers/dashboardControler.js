@@ -52,7 +52,7 @@ exports.getUsers=(req,res,next)=>{
     var decoded = getUser(req)  
     userModel.findOne({_id:decoded.id},(err,data)=>{
         if (data.role=="superAdmin"){
-            userModel.find({_id:{$ne:decoded.data.id}},(err,user)=>{
+            userModel.find({_id:{$ne:decoded.id}},(err,user)=>{
                 res.json(user)
             })
         }
