@@ -5,6 +5,10 @@ const ingrTypeModel=require("../models/ingredientTypes")
 const jwt=require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+
+
+
+
 function getUser(req){
     let authToken=req.headers['authorization']
     
@@ -110,15 +114,18 @@ exports.addIngrMenu=(req,res,next)=>{
     
 }
 
-exports.addIngredient=(req,res,next)=>{   
+exports.addIngredient=(req,res,next)=>{  
+    console.log(req.file)
+    console.log(req.body)
     let decoded = getUser(req)
     let data=req.body
     data.user_id=decoded.id
     data.normal_price=data.price
+    data.image=req.file.filename
+
     ingrTypeModel.create(data,(err,ingr)=>{
         res.json(ingr);
-    })  
- 
+    })
     
 }
 
