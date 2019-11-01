@@ -1,6 +1,5 @@
 let menuSchema=new Schema({    
     title:String,
-    image:String,
-    productids:[ObjectId]
+    user_id:ObjectId
 })
 module.exports = mongoose.model('menu', menuSchema);

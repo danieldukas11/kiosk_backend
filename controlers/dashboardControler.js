@@ -1,8 +1,9 @@
 
 const userModel=require("../models/user");
-const ingrModel=require("../models/ingredient")
-const ingrTypeModel=require("../models/ingredientTypes")
-const jwt=require('jsonwebtoken')
+const ingrModel=require("../models/ingredient");
+const ingrTypeModel=require("../models/ingredientTypes");
+const prodMenuModel=require("../models/menu")
+const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -102,6 +103,14 @@ exports.getIngredient=(req,res,next)=>{
     
 }
 
+exports.getProdMenu=(req,res,next)=>{   
+    let decoded = getUser(req)
+    prodMenuModel.find({user_id:decoded.id},(err,prod)=>{
+        res.json(prod)
+    }) 
+    
+}
+
 exports.addIngrMenu=(req,res,next)=>{   
     let decoded = getUser(req)
     let dat={
@@ -113,7 +122,17 @@ exports.addIngrMenu=(req,res,next)=>{
     })  
     
 }
-
+exports.addProdMenu=(req,res,next)=>{   
+    let decoded = getUser(req)
+    let dat={
+        title:req.body.title,
+        user_id:decoded.id,        
+    }
+    prodMenuModel.create(dat,(err,prodMenu)=>{
+        res.json(prodMenu);
+    })  
+    
+}
 exports.addIngredient=(req,res,next)=>{  
     console.log(req.file)
     console.log(req.body)
@@ -125,8 +144,7 @@ exports.addIngredient=(req,res,next)=>{
 
     ingrTypeModel.create(data,(err,ingr)=>{
         res.json(ingr);
-    })
-    
+    })    
 }
 
 
