@@ -1,9 +1,15 @@
 let productSchema=new Schema({    
     title:String,
-    cal:Number,
     price:Number,   
     image:String,
-    ingredients:[Number],
-    defaults:[Number] 
+    sizable:Boolean,
+    customizable:Boolean,
+    special_menu_ids:Array,
+    special_ids:Array,
+    selected_ids:Array,
+    menu_ids:Array,
+    sizes:Array,
+    size:Object,
+    user_id:ObjectId
 })
 module.exports = mongoose.model('product', productSchema);

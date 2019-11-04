@@ -2,7 +2,8 @@
 const userModel=require("../models/user");
 const ingrModel=require("../models/ingredient");
 const ingrTypeModel=require("../models/ingredientTypes");
-const prodMenuModel=require("../models/menu")
+const prodMenuModel=require("../models/menu");
+const productModel=require("../models/product");
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -111,6 +112,14 @@ exports.getProdMenu=(req,res,next)=>{
     
 }
 
+exports.getProducts=(req,res,next)=>{   
+    let decoded = getUser(req)
+    productModel.find({user_id:decoded.id},(err,prod)=>{
+        res.json(prod)
+    }) 
+    
+}
+
 exports.addIngrMenu=(req,res,next)=>{   
     let decoded = getUser(req)
     let dat={
@@ -134,8 +143,6 @@ exports.addProdMenu=(req,res,next)=>{
     
 }
 exports.addIngredient=(req,res,next)=>{  
-    console.log(req.file)
-    console.log(req.body)
     let decoded = getUser(req)
     let data=req.body
     data.user_id=decoded.id
@@ -145,6 +152,64 @@ exports.addIngredient=(req,res,next)=>{
     ingrTypeModel.create(data,(err,ingr)=>{
         res.json(ingr);
     })    
+}
+
+exports.addProduct=(req,res,next)=>{  
+    let decoded = getUser(req)
+       let dat={} 
+       dat.customizable=req.body.customizable;
+       dat.sizable=req.body.sizable;
+       dat.title=req.body.title;
+       dat.image=req.file.filename
+       dat.menu_ids=JSON.parse(req.body.menu_ids)
+       dat.user_id=decoded.id
+      
+       if(dat.sizable&&req.body.sizes){          
+           dat.sizes=JSON.parse(req.body.sizes);
+           dat.size=dat.sizes[1];
+           dat.price=dat.size.price     
+             
+        }
+        if(dat.customizable){
+           if(req.body.defaultIngr&&req.body.defaultIngr.length) {
+               let a=0
+               let ingr=JSON.parse(req.body.defaultIngr)
+               console.log(ingr)
+               ingr.forEach(ing => {
+                   a+=ing.price
+               });              
+               dat.price=a 
+           }
+           console.log(dat.price)
+        }
+        if(req.body.price&&dat.customizable!="true"&&dat.sizable!="true"){
+            dat.price=req.body.price
+        }
+        productModel.create(dat,(err,product)=>{
+           if(product.customizable){
+            let defingr=JSON.parse(req.body.defaultIngr)
+                if(defingr&&defingr.length){
+                    defingr.forEach(ding => {
+                        ingrTypeModel.updateOne({_id:ding._id},{$push:{default_ids:product._id}},(err,ingr)=>{
+                            let pringr=JSON.parse(req.body.prodIngr)
+                            if(pringr&&pringr.length){
+                                pringr.forEach(ing=>{
+                                    ingrModel.updateOne({_id:ing._id},{$push:{product_ids:product._id}},(err,ingr)=>{
+                                        
+                                    })
+                                })
+                            }
+                        })
+                    });              
+                }
+                res.json(product)
+            }
+            else{
+                res.json(product)
+            }
+            
+        })    
+
 }
 
 
