@@ -69,6 +69,7 @@ exports.getMenu=(req, res, next)=>{
 
     ],(err,data)=>{    
         res.json(data)
+        console.log(data)
     })
  
 }
@@ -153,5 +154,6 @@ exports.getSpecials=(req, res, next)=>{
 
 ],(err,data)=>{     
     res.json(data)
+    //console.log(data)
 })
 }

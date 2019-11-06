@@ -4,6 +4,8 @@ const ingrModel=require("../models/ingredient");
 const ingrTypeModel=require("../models/ingredientTypes");
 const prodMenuModel=require("../models/menu");
 const productModel=require("../models/product");
+const specialModel=require("../models/special")
+const comboMenuModel=require("../models/combomenu")
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -111,6 +113,13 @@ exports.getProdMenu=(req,res,next)=>{
     }) 
     
 }
+exports.getComboMenu=(req,res,next)=>{   
+    let decoded = getUser(req)
+    comboMenuModel.find({user_id:decoded.id},(err,prod)=>{
+        res.json(prod)
+    }) 
+    
+}
 
 exports.getProducts=(req,res,next)=>{   
     let decoded = getUser(req)
@@ -212,6 +221,52 @@ exports.addProduct=(req,res,next)=>{
 
 }
 
+exports.addCombo=(req,res,next)=>{ 
+    let decoded = getUser(req)  
+    let dat={
+        title:req.body.title,
+        image:req.file.filename,
+        user_id:decoded._id,
+        price:req.body.price
+    }    
+    specialModel.create(dat,(err,combo)=>{
+        res.json(combo)
+    })    
+    
+}
+
+
+exports.addComboMenu=(req,res,next)=>{ 
+    let decoded = getUser(req)  
+    let dat=req.body  
+    dat.user_id= decoded.id
+    comboMenuModel.create(dat,(err,comboMenu)=>{
+        res.json(comboMenu)
+    })
+    
+}
+    
+exports.addComboProd=   (req,res,next)=>{ 
+    if(req.body.products&&req.body.products.length){     
+       productModel.updateMany(
+        { _id: { $in: req.body.products } },
+        {$push:{special_menu_ids:req.body.special_menu_id}},
+        (err,data)=>{
+            console.log(req.body.products)
+            res.json(data)
+        })
+     
+       
+    }
+   
+    
+}
+function* updateProd(req){
+    req.body.products.forEach( async prod=>{
+        let p1=await productModel.updateOne({_id:prod._id},{$push:{special_menu_ids:req.body.special_menu_id}}).exec()
+
+   })
+}
 
 exports.deleteIngredient=(req,res,next)=>{  
     ingrTypeModel.findOneAndDelete({_id:req.query.id},(err,data)=>{
