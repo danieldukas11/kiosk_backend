@@ -252,7 +252,6 @@ exports.addComboProd=   (req,res,next)=>{
         { _id: { $in: req.body.products } },
         {$push:{special_menu_ids:req.body.special_menu_id}},
         (err,data)=>{
-            console.log(req.body.products)
             res.json(data)
         })
      
@@ -260,12 +259,6 @@ exports.addComboProd=   (req,res,next)=>{
     }
    
     
-}
-function* updateProd(req){
-    req.body.products.forEach( async prod=>{
-        let p1=await productModel.updateOne({_id:prod._id},{$push:{special_menu_ids:req.body.special_menu_id}}).exec()
-
-   })
 }
 
 exports.deleteIngredient=(req,res,next)=>{  

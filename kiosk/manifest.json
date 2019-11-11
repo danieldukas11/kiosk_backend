@@ -1,0 +1,8 @@
+{
+    "manifest_version": 2,
+    "name": "kiosk payment",
+    "version": "1.0.0",
+    "default_locale": "en",
+    "description": "Kiosk payment with serial port", 
+    "permissions": ["serial"]    
+  }
