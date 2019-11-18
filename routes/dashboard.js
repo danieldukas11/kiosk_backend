@@ -21,6 +21,7 @@ var upload = multer({ storage:storage })
  router.post('/admin/ingr_menu/add',dashboardController.addIngrMenu);
  router.post('/admin/ingredient/add',upload.single('image'),dashboardController.addIngredient);
  router.post('/admin/product/add',upload.single('image'),dashboardController.addProduct);
+ router.post('/admin/combo/add',upload.single('image'),dashboardController.addCombo);
  router.post('/admin/prod_menu/add',dashboardController.addProdMenu);
  router.post('/admin/combo_menu/add',dashboardController.addComboMenu);
  router.post('/admin/combo_prod/add',dashboardController.addComboProd);

@@ -1,4 +1,3 @@
-
 const userModel=require("../models/user");
 const ingrModel=require("../models/ingredient");
 const ingrTypeModel=require("../models/ingredientTypes");
@@ -222,16 +221,72 @@ exports.addProduct=(req,res,next)=>{
 }
 
 exports.addCombo=(req,res,next)=>{ 
-    let decoded = getUser(req)  
+    let decoded = getUser(req) 
     let dat={
         title:req.body.title,
         image:req.file.filename,
         user_id:decoded._id,
         price:req.body.price
-    }    
+    }   
+    let combo_menu=JSON.parse(req.body.comboMenu ),
+    combo_menu_id=[],
+    defaults=JSON.parse(req.body.defaults ),
+    defaults_ids=[]
+    products=JSON.parse(req.body.products ),
+    products_ids=[];
+    if (combo_menu&&combo_menu.length){
+        combo_menu.forEach(m=>{
+            combo_menu_id.push(m._id)
+        })
+    }
+    if (defaults&&defaults.length){
+        defaults.forEach(m=>{
+            defaults_ids.push(m._id)
+        })
+    }
+    if (products&&products.length){
+        products.forEach(m=>{
+            products_ids.push(m._id)
+        })
+    }       
+  
+
     specialModel.create(dat,(err,combo)=>{
-        res.json(combo)
-    })    
+        if(combo_menu_id&&combo_menu_id.length){     
+            comboMenuModel.updateMany(
+             { _id: { $in: combo_menu_id } },
+             {$push:{specials_id:combo._id}},
+             (err,data)=>{
+                if(products_ids&&products_ids.length){  
+                    productModel.updateMany(
+                        { _id: { $in: products_ids } },
+                        {$push:{special_ids:combo._id}},
+                        (err,data)=>{
+                            if(defaults_ids&&defaults_ids.length){
+                                productModel.updateMany(
+                                    { _id: { $in: products_ids } },
+                                    {$push:{selected_ids:combo._id}},
+                                    (err,data)=>{
+                                        res.json(combo)
+
+                                    })
+                            }
+                            else{
+                                res.json(combo)
+                            }
+                        }
+                    )
+                }
+                else{
+                    res.json(combo)
+                }
+                
+            })  
+        } 
+        else{
+            res.json(combo)
+        }
+    })   
     
 }
 
