@@ -1,6 +1,6 @@
 let comboMenuSchema=new Schema({    
     title:String,
-    configurable:String,
+    configurable:Boolean,
     specials_id:Array,
     user_id:ObjectId
 })
