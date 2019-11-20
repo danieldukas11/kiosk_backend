@@ -3,8 +3,8 @@ const ingrModel=require("../models/ingredient");
 const ingrTypeModel=require("../models/ingredientTypes");
 const prodMenuModel=require("../models/menu");
 const productModel=require("../models/product");
-const specialModel=require("../models/special")
-const comboMenuModel=require("../models/combomenu")
+const specialModel=require("../models/special");
+const comboMenuModel=require("../models/combomenu");
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -226,7 +226,8 @@ exports.addCombo=(req,res,next)=>{
         title:req.body.title,
         image:req.file.filename,
         user_id:decoded._id,
-        price:req.body.price
+        price:req.body.price,
+        user_id:decoded.id
     }   
     let combo_menu=JSON.parse(req.body.comboMenu ),
     combo_menu_id=[],
