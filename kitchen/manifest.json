@@ -1,6 +1,6 @@
 {
-    "name": "Kiosk!",
-    "description": "My first Chrome App.",
+    "name": "Kitchen Kiosk",
+    "description": "Kitchen kiosk .",
     "version": "0.1",
     "manifest_version": 2,
     "app": {

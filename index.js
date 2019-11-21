@@ -33,7 +33,7 @@ function base64_decode(base64str, file) {
   app.use(express.static('public'));
   app.use("/", express.static( __dirname + '/kiosk-dashboard' ));
   app.use("/usr_kiosk/", express.static( __dirname + '/kiosk' ));
-  app.use("/kitchen_kiosk/", express.static( __dirname + '/kitchen-kiosk' ));
+  app.use("/kitchen_kiosk/", express.static( __dirname + '/kitchen' ));
  
 mongoose.connect('mongodb+srv://adminkiosk:emil094641864@kiosk-usxqr.mongodb.net/kiosk', {useNewUrlParser: true, useUnifiedTopology: true}, (err,db) => {
     // throw new Error(err);
@@ -52,7 +52,7 @@ app.get('/usr_kiosk/*', (req, res) => {
 
 });
 app.get('/kitchen_kiosk', (req, res) => {
-    res.sendFile(path.join(__dirname, './kitchen-kiosk/index.html'));
+    res.sendFile(path.join(__dirname, './kitchen/index.html'));
 });
 
 app.get('*', (req, res) => {
