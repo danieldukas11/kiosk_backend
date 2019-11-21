@@ -10,4 +10,4 @@ let OrderSchema=new Schema({
     action:{ type : String, default: "pending" },
     orderDate:{ type : Date, default: Date.now }
 })
-module.exports = mongoose.model('order', OrderSchema);
+module.exports = mongoose.model('order', OrderSchema); 
