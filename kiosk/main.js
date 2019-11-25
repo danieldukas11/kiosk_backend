@@ -85,7 +85,7 @@ module.exports = "<div class=\"cash-wrapper\">\n        <div class=\"left-contai
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"cash-wrapper\">\n    <div class=\"left-container\">\n        <div class=\"title\">\n            Thank You, you paid $ {{inserted}} $ {{inserted-total}} change will come with your order. Please collect your receipt below.\n        </div> \n        <div style=\"color: #5E5B58;\">\n            <button class=\"finish-button\" (click)=\"finish()\">Finished</button>\n            <div class=\"total-amount\">Total amount: $ {{total}}</div>\n            <span>Inserted amount </span> <input type=\"text\" placeholder=\"$ 0.00\" readonly class=\"insert-amount\" [value]=\"'$ '+inserted\">\n        </div>        \n    </div> \n</div>\n"
+module.exports = "<div class=\"cash-wrapper\">\n    <div class=\"left-container\">\n        <div class=\"title\">\n            Thank You, you paid $ {{inserted}} $ {{inserted-total}} change wil l come with your order. Please collect your receipt below.\n        </div> \n        <div style=\"color: #5E5B58;\">\n            <button class=\"finish-button\" (click)=\"finish()\">Finished</button>\n            <div class=\"total-amount\">Total amount: $ {{total}}</div>\n            <span>Inserted amount </span> <input type=\"text\" placeholder=\"$ 0.00\" readonly class=\"insert-amount\" [value]=\"'$ '+inserted\">\n        </div>        \n    </div> \n</div>\n"
 
 /***/ }),
 

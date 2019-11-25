@@ -10,6 +10,10 @@ let productSchema=new Schema({
     menu_ids:Array,
     sizes:Array,
     size:Object,
-    user_id:ObjectId
+    user_id:ObjectId,
+    orders:{
+        type:Number,
+        default:0
+    }
 })
 module.exports = mongoose.model('product', productSchema);
