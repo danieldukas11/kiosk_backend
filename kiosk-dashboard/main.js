@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"dashboard-wrapper\">\n    <div class=\"sidebar\">\n        <div class=\"nav\" *ngFor='let nav of menu'  [routerLink]=\"nav?.link\"><i [class]=\"nav?.icon\" ></i> {{nav.title}}</div>\n        <div class=\"nav\" (click)=\"logout()\"><i class=\"fas fa-sign-out-alt\"></i> Log Out</div>\n    </div>\n    <div class=\"route\">\n            <router-outlet></router-outlet>\n    </div>\n   \n</div>"
+module.exports = "<div class=\"dashboard-wrapper\">\n    <div class=\"sidebar\">\n        <div class=\"nav\" *ngFor='let nav of menu'  [routerLink]=\"nav?.link\"><i [class]=\"nav?.icon\" ></i> {{nav.title}}</div>\n        <div class=\"nav\" (click)=\"logout()\"><i class=\"fas fa-sign-out-alt\"></i> Log Out</div>\n    </div>\n    <div class=\"route\">\n            <router-outlet></router-outlet>\n    </div>   \n</div>"
 
 /***/ }),
 
