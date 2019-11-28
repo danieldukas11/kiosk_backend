@@ -34,6 +34,7 @@ function base64_decode(base64str, file) {
   app.use("/", express.static( __dirname + '/kiosk-dashboard' ));
   app.use("/usr_kiosk/", express.static( __dirname + '/kiosk' ));
   app.use("/kitchen_kiosk/", express.static( __dirname + '/kitchen' ));
+  app.use("/progress-monitor/", express.static( __dirname + '/progress-monitor' ));
  
 mongoose.connect('mongodb+srv://adminkiosk:emil094641864@kiosk-usxqr.mongodb.net/kiosk', {useNewUrlParser: true, useUnifiedTopology: true}, (err,db) => {
     // throw new Error(err);
@@ -50,6 +51,9 @@ app.use("/dashboard", require('./routes/dashboard'));
 app.get('/usr_kiosk/*', (req, res) => {
     res.sendFile(path.join(__dirname, './kiosk/index.html'));
 
+});
+app.get('/progress-monitor', (req, res) => {
+    res.sendFile(path.join(__dirname, './progress-monitor/index.html'));
 });
 app.get('/kitchen_kiosk', (req, res) => {
     res.sendFile(path.join(__dirname, './kitchen/index.html'));
