@@ -101,7 +101,7 @@ exports.getIngrMenu=(req,res,next)=>{
 exports.getCombos=(req,res,next)=>{
     var decoded = getUser(req) ;
      specialModel.find({user_id:decoded.id},(err,special)=>{
-        res.json(speciak)
+        res.json(special)
     })  
 }
 exports.getIngredient=(req,res,next)=>{   
