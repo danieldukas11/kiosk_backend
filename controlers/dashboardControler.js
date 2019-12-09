@@ -5,7 +5,6 @@ const prodMenuModel=require("../models/menu");
 const productModel=require("../models/product");
 const specialModel=require("../models/special");
 const comboMenuModel=require("../models/combomenu");
-
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -101,14 +100,14 @@ exports.getIngrMenu=(req,res,next)=>{
 }
 exports.getCombos=(req,res,next)=>{
     var decoded = getUser(req) ;
-    specialModel.find({user_id:decoded.id},(err,ingr)=>{
-        res.json(ingr)
+     specialModel.find({user_id:decoded.id},(err,special)=>{
+        res.json(speciak)
     })  
 }
 exports.getIngredient=(req,res,next)=>{   
     let decoded = getUser(req)
-    comboModel.find({user_id:decoded.id},(err,combo)=>{
-        res.json(combo)
+    ingrTypeModel.find({user_id:decoded.id},(err,ingr)=>{
+        res.json(ingr)
     }) 
     
 }
