@@ -5,6 +5,7 @@ const prodMenuModel=require("../models/menu");
 const productModel=require("../models/product");
 const specialModel=require("../models/special");
 const comboMenuModel=require("../models/combomenu");
+const fs=require("fs");
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -324,10 +325,24 @@ exports.addComboProd=   (req,res,next)=>{
     
 }
 
-exports.deleteIngredient=(req,res,next)=>{  
-    ingrTypeModel.findOneAndDelete({_id:req.query.id},(err,data)=>{
-        res.json(data)
-    })       
+exports.deleteIngredient=(req,res,next)=>{ 
+    ingrTypeModel.findOne({_id:req.query.id},(err,data)=>{
+        if (err){
+            res.status(400).json(err)
+            return
+        }
+        fs.unlink(`./public/images/${data.image}`, function (err) {
+            if (err){
+                res.status(400).json(err)
+                return
+            }
+            // if no error, file has been deleted successfully
+            ingrTypeModel.findOneAndDelete({_id:req.query.id},(err,data)=>{
+                res.json(data)
+            })
+        });
+    }) 
+        
 }
 
 exports.deleteComboProd=(req,res,next)=>{
@@ -337,5 +352,28 @@ exports.deleteComboProd=(req,res,next)=>{
         (err,data)=>{
             res.json(data)
         })
+  
+}
+exports.deleteIngredientMenu=(req,res,next)=>{
+    ingrTypeModel.find({ ingredient_ids: { $in: req.query.id } },(err,data)=>{
+        if (data&&data.length){
+            data.forEach((d)=>{
+                if (fs.existsSync(`./public/images/${d.image}`)) {
+                fs.unlinkSync(`./public/images/${d.image}`);  
+                }                  
+            })
+        }
+        ingrTypeModel.deleteMany({ ingredient_ids: { $in: req.query.id } },(err,data)=>{
+            if(err){
+                res.status(400).json(err)
+            }
+            ingrModel.findOneAndDelete({_id:req.query.id},(err,data)=>{
+                if(err){
+                    res.status(400).json(err)
+                }
+                res.json(data)
+            })
+        })
+   })
   
 }

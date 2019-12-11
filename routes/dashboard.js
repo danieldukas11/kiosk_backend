@@ -30,5 +30,6 @@ var upload = multer({ storage:storage })
  router.post('/admin/combo_prod/add',dashboardController.addComboProd);
 
  router.delete('/admin/ingredient/delete',dashboardController.deleteIngredient);
+ router.delete('/admin/ingredientmenu/delete',dashboardController.deleteIngredientMenu);
  router.delete('/admin/combo_prod/delete',dashboardController.deleteComboProd);
   module.exports = router;
