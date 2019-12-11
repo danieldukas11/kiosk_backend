@@ -379,7 +379,41 @@ exports.deleteIngredientMenu=(req,res,next)=>{
 }
 
 exports.deleteProdMenu=(req,res,next)=>{
-
+    prodMenuModel.findOneAndDelete({_id:req.query.id},(err,data)=>{     
+        if(err){
+            res.status(400).json(err)
+            return
+        }     
+        productModel.find({ menu_ids: { $in: req.query.id } },(err,data)=>{
+        let ar=[]
+        if (data&&data.length){
+            data.forEach((d)=>{
+                ar.push(d._id)
+                if (fs.existsSync(`./public/images/${d.image}`)) {
+                fs.unlinkSync(`./public/images/${d.image}`);  
+                }                  
+            })
+        }
+        productModel.deleteMany({ menu_ids: { $in: req.query.id } },(err,data)=>{
+            console.log(ar)
+            if(ar.length){
+                ingrTypeModel.updateMany(
+                    { default_ids: { $in: ar } },
+                    {$pullAll:{default_ids:ar}},
+                    (err,data)=>{
+                        res.json(data)
+                        return
+                    })
+                    return
+            }
+            res.json(data)
+        })
+        
+       
+    })
+       
+    })
+   
 }
 
 exports.deleteProduct=(req,res,next)=>{
