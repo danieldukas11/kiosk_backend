@@ -377,3 +377,49 @@ exports.deleteIngredientMenu=(req,res,next)=>{
    })
   
 }
+
+exports.deleteProdMenu=(req,res,next)=>{
+
+}
+
+exports.deleteProduct=(req,res,next)=>{
+    ingrModel.updateMany(
+        { product_ids: { $in: req.query.id } },
+        {$pullAll:{product_ids:[req.query.id]}},
+        (err,data)=>{
+            if(err){
+                res.status(400).json(err)
+                return
+            }
+            ingrTypeModel.updateMany(
+                { default_ids: { $in: req.query.id } },
+                {$pullAll:{default_ids:[req.query.id]}},
+                (err,data)=>{
+                    if(err){
+                        res.status(400).json(err)
+                        return
+                    }
+                    productModel.findOneAndDelete({_id:req.query.id},(err,data)=>{     
+                        if(err){
+                            res.status(400).json(err)
+                            return
+                        }                  
+                        if (data&&data.image){                           
+                            if (fs.existsSync(`./public/images/${data.image}`)) {
+                                fs.unlinkSync(`./public/images/${data.image}`);}
+                        }
+                        res.json(data)
+                    })
+                })
+        })
+     
+
+    
+}
+
+exports.deleteCombo=(req,res,next)=>{
+
+}
+exports.deleteComboMenu=(req,res,next)=>{
+
+}
