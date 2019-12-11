@@ -329,3 +329,13 @@ exports.deleteIngredient=(req,res,next)=>{
         res.json(data)
     })       
 }
+
+exports.deleteComboProd=(req,res,next)=>{
+    productModel.updateMany(
+        { _id:req.query.id },
+       {$set:{special_menu_ids:[],special_ids:[],selected_ids:[]}},
+        (err,data)=>{
+            res.json(data)
+        })
+  
+}
