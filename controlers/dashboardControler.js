@@ -472,7 +472,33 @@ exports.deleteComboMenu=(req,res,next)=>{
     })
 }
 exports.deleteCombo=(req,res,next)=>{
-
+    specialModel.findOneAndDelete({_id:req.query.id},(err,data)=>{     
+        if(err){
+            res.status(400).json(err)
+            return
+        }                  
+        if (data&&data.image){                           
+            if (fs.existsSync(`./public/images/${data.image}`)) {
+                fs.unlinkSync(`./public/images/${data.image}`);}
+        }
+        comboMenuModel.updateMany( { specials_id: { $in: req.query.id } },
+            {$pullAll:{specials_id:[req.query.id]}},(err,data)=>{
+                productModel.updateMany({ special_ids: { $in: req.query.id }} ,{$pullAll:{special_ids: [req.query.id]}},(err,data)=>{
+                    if(err){
+                        res.status(400).json(err)
+                        return
+                    }  
+                    productModel.updateMany({ selected_ids: { $in: req.query.id }} ,{$pullAll:{selected_ids: [req.query.id]}},(err,data)=>{
+                        if(err){
+                            res.status(400).json(err)
+                            return
+                        }  
+                        res.json(data)
+                    })
+                })
+            }
+            )
+    })
 }
 
 
