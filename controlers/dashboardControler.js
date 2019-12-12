@@ -531,3 +531,26 @@ exports.addAdVideo=(req,res,next)=>{
         
     })
 }
+
+exports.editIngrMenu=(req,res,next)=>{
+
+}
+exports.editIngredient=(req,res,next)=>{
+
+}
+exports.editProdMenu=(req,res,next)=>{
+
+}
+exports.editProduct=(req,res,next)=>{
+
+}
+exports.editCombo=(req,res,next)=>{
+
+}
+exports.editComboMenu=(req,res,next)=>{
+
+}
+
+exports.editComboProd=(req,res,next)=>{
+
+}
