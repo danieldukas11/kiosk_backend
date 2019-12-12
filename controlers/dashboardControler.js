@@ -561,7 +561,13 @@ exports.updateCombo=(req,res,next)=>{
 
 }
 exports.updateComboMenu=(req,res,next)=>{
-
+    comboMenuModel.updateOne({_id:req.body._id},{title:req.body.title,configurable:req.body.configurable},(err,data)=>{
+        if (err){
+            res.status(400).json(err)
+            return
+        }
+        res.json(data)
+    })  
 }
 
 exports.updateComboProd=(req,res,next)=>{
