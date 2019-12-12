@@ -504,7 +504,7 @@ exports.deleteCombo=(req,res,next)=>{
 
 exports.addAdVideo=(req,res,next)=>{
     let decoded = getUser(req) 
-    let data={
+    let formdata={
         user_id:decoded,
         adVideo:req.file.filename,
     }
@@ -520,7 +520,7 @@ exports.addAdVideo=(req,res,next)=>{
 
         }
         else{
-            progressModel.create(data,(err,data)=>{
+            progressModel.create(formdata,(err,data)=>{
                 if (err){
                     res.status(400).json(err)
                     return
