@@ -345,15 +345,7 @@ exports.deleteIngredient=(req,res,next)=>{
         
 }
 
-exports.deleteComboProd=(req,res,next)=>{
-    productModel.updateMany(
-        { _id:req.query.id },
-       {$set:{special_menu_ids:[],special_ids:[],selected_ids:[]}},
-        (err,data)=>{
-            res.json(data)
-        })
-  
-}
+
 exports.deleteIngredientMenu=(req,res,next)=>{
     ingrTypeModel.find({ ingredient_ids: { $in: req.query.id } },(err,data)=>{
         if (data&&data.length){
@@ -450,10 +442,35 @@ exports.deleteProduct=(req,res,next)=>{
 
     
 }
-
-exports.deleteCombo=(req,res,next)=>{
-
+exports.deleteComboProd=(req,res,next)=>{
+    productModel.updateMany(
+        { _id:req.query.id },
+       {$set:{special_menu_ids:[],special_ids:[],selected_ids:[]}},
+        (err,data)=>{
+            res.json(data)
+    })
+  
 }
+
 exports.deleteComboMenu=(req,res,next)=>{
+    comboMenuModel.findOneAndDelete({_id:req.query.id},(err,data)=>{     
+        if(err){
+            res.status(400).json(err)
+            return
+        }                  
+        productModel.updateMany(
+            { special_menu_ids: { $in: req.query.id } },
+           {$set:{special_menu_ids:[],special_ids:[],selected_ids:[]}},
+            (err,data)=>{
+                if(err){
+                    res.status(400).json(err)
+                    return
+                }  
+                res.json(data)
+        })
+        
+    })
+}
+exports.deleteCombo=(req,res,next)=>{
 
 }
