@@ -546,7 +546,13 @@ exports.updateIngredient=(req,res,next)=>{
 
 }
 exports.updateProdMenu=(req,res,next)=>{
-
+    prodMenuModel.updateOne({_id:req.body._id},{title:req.body.title},(err,data)=>{
+        if (err){
+            res.status(400).json(err)
+            return
+        }
+        res.json(data)
+    })  
 }
 exports.updateProduct=(req,res,next)=>{
 
