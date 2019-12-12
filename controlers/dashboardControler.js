@@ -532,25 +532,32 @@ exports.addAdVideo=(req,res,next)=>{
     })
 }
 
-exports.editIngrMenu=(req,res,next)=>{
+exports.updateIngrMenu=(req,res,next)=>{
+    ingrModel.updateOne({_id:req.body._id},{title:req.body.title},(err,data)=>{
+        if (err){
+            res.status(400).json(err)
+            return
+        }
+        res.json(data)
+    })  
 
 }
-exports.editIngredient=(req,res,next)=>{
+exports.updateIngredient=(req,res,next)=>{
 
 }
-exports.editProdMenu=(req,res,next)=>{
+exports.updateProdMenu=(req,res,next)=>{
 
 }
-exports.editProduct=(req,res,next)=>{
+exports.updateProduct=(req,res,next)=>{
 
 }
-exports.editCombo=(req,res,next)=>{
+exports.updateCombo=(req,res,next)=>{
 
 }
-exports.editComboMenu=(req,res,next)=>{
+exports.updateComboMenu=(req,res,next)=>{
 
 }
 
-exports.editComboProd=(req,res,next)=>{
+exports.updateComboProd=(req,res,next)=>{
 
 }

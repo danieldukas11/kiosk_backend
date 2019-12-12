@@ -38,13 +38,13 @@ let videoUpload=multer({ storage:storage2})
  router.post('/admin/combo_menu/add',dashboardController.addComboMenu);
  router.post('/admin/combo_prod/add',dashboardController.addComboProd);
 
- router.put('/admin/ingr_menu/edit',dashboardController.editIngrMenu); 
- router.put('/admin/ingredient/edit',dashboardController.editIngredient);
- router.put('/admin/prod_menu/edit',dashboardController.editProdMenu);
- router.put('/admin/product/edit',dashboardController.editProduct);
- router.put('/admin/combo/edit',dashboardController.editCombo);
- router.put('/admin/combo_menu/edit',dashboardController.editComboMenu);
- router.put('/admin/combo_prod/edit',dashboardController.editComboProd);
+ router.put('/admin/ingr_menu/update',dashboardController.updateIngrMenu); 
+ router.put('/admin/ingredient/update',dashboardController.updateIngredient);
+ router.put('/admin/prod_menu/update',dashboardController.updateProdMenu);
+ router.put('/admin/product/update',dashboardController.updateProduct);
+ router.put('/admin/combo/update',dashboardController.updateCombo);
+ router.put('/admin/combo_menu/update',dashboardController.updateComboMenu);
+ router.put('/admin/combo_prod/update',dashboardController.updateComboProd);
 
 
  router.delete('/admin/ingredient/delete',dashboardController.deleteIngredient);
