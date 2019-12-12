@@ -5,6 +5,7 @@ const prodMenuModel=require("../models/menu");
 const productModel=require("../models/product");
 const specialModel=require("../models/special");
 const comboMenuModel=require("../models/combomenu");
+const progressModel=require("../models/progressMonitor");
 const fs=require("fs");
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -69,8 +70,7 @@ exports.getUsers=(req,res,next)=>{
 }
 
 
-exports.addUser=(req,res,next)=>{
-    
+exports.addUser=(req,res,next)=>{    
     var decoded = getUser(req)
     userModel.findOne({_id:decoded.id},(err,data)=>{
         if (data.role=="superAdmin"){
@@ -473,4 +473,35 @@ exports.deleteComboMenu=(req,res,next)=>{
 }
 exports.deleteCombo=(req,res,next)=>{
 
+}
+
+
+exports.addAdVideo=(req,res,next)=>{
+    let decoded = getUser(req) 
+    let data={
+        user_id:decoded,
+        adVideo:req.file.filename,
+    }
+    progressModel.findOne({user_id:decoded},(err,data)=>{
+        if(data){
+            progressModel.findOneAndUpdate({user_id:decoded},{adVideo:req.file.filename},(err,data)=>{
+                if (err){
+                    res.status(400).json(err)
+                    return
+                }
+                res.json(data)
+            })
+
+        }
+        else{
+            progressModel.create(data,(err,data)=>{
+                if (err){
+                    res.status(400).json(err)
+                    return
+                }
+                res.json(data)
+            })
+        }
+        
+    })
 }
