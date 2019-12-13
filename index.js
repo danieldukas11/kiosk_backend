@@ -27,7 +27,10 @@ function base64_decode(base64str, file) {
     console.log('******** File created from base64 encoded string ********');
 }
 
-
+var corsOptions = {
+    origin: 'localhost:4200',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
   
   app.use(cors());
   app.use(express.static('public'));

@@ -505,12 +505,12 @@ exports.deleteCombo=(req,res,next)=>{
 exports.addAdVideo=(req,res,next)=>{
     let decoded = getUser(req) 
     let formdata={
-        user_id:decoded,
+        user_id:decoded.id,
         adVideo:req.file.filename,
     }
-    progressModel.findOne({user_id:decoded},(err,data)=>{
+    progressModel.findOne({user_id:decoded.id},(err,data)=>{        
         if(data){
-            progressModel.findOneAndUpdate({user_id:decoded},{adVideo:req.file.filename},(err,data)=>{
+            progressModel.findOneAndUpdate({user_id:decoded.id},{adVideo:req.file.filename},(err,data)=>{
                 if (err){
                     res.status(400).json(err)
                     return
@@ -527,9 +527,9 @@ exports.addAdVideo=(req,res,next)=>{
                 }
                 res.json(data)
             })
-        }
-        
+        }        
     })
+    
 }
 
 exports.updateIngrMenu=(req,res,next)=>{

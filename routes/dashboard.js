@@ -3,7 +3,9 @@ const fs=require("fs");
 var multer  = require('multer')
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-     
+      if (!fs.existsSync('public/images')){
+        fs.mkdirSync('public/images');
+    }
       cb(null, 'public/images')
     },
     filename: function (req, file, cb) {
@@ -12,7 +14,9 @@ var storage = multer.diskStorage({
   })
   var storage2 = multer.diskStorage({
     destination: function (req, file, cb) {
-     
+      if (!fs.existsSync('public/videos')){
+        fs.mkdirSync('public/videos');
+    }
       cb(null, 'public/videos')
     },
     filename: function (req, file, cb) {
