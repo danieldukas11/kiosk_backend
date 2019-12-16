@@ -64,4 +64,5 @@ let videoUpload=multer({ storage:storage2})
  router.delete('/admin/combo_prod/delete',dashboardController.deleteComboProd);
 
  router.post("/admin/ads/video/add",videoUpload.single("adVideo"),dashboardController.addAdVideo)
+ router.get('/admin/progress_monitor',dashboardController.getUsers);
   module.exports = router;

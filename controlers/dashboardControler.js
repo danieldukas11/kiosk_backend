@@ -531,6 +531,12 @@ exports.addAdVideo=(req,res,next)=>{
     })
     
 }
+exports.getprogressMonitorData=(req,res,next)=>{
+    let decoded = getUser(req) 
+    progressModel.find({_id:decoded.id},(err,data)=>{
+        res.json(data)
+    })
+}
 
 exports.updateIngrMenu=(req,res,next)=>{
     ingrModel.updateOne({_id:req.body._id},{title:req.body.title},(err,data)=>{
