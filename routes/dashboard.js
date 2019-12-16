@@ -28,6 +28,7 @@ let videoUpload=multer({ storage:storage2})
  const dashboardController = require('../controlers/dashboardControler');
  router.post('/login',dashboardController.login);
  router.post('/adduser',dashboardController.addUser);
+ router.put('/updateuser',dashboardController.updateUser);
  router.get('/users',dashboardController.getUsers);
 
  router.get('/admin/ingr_menu',dashboardController.getIngrMenu);
