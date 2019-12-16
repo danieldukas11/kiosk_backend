@@ -586,3 +586,17 @@ exports.updateComboMenu=(req,res,next)=>{
 exports.updateComboProd=(req,res,next)=>{
 
 }
+exports.updateUser = (req,res,next)=>{
+    let usr={
+       email:req.body.email,
+       firstName:req.body.firstName,
+       lastName:req.body.lastName, 
+    }
+    userModel.updateOne({_id:req.body._id},usr,(err,data)=>{
+        if (err){
+            res.status(400).json(err)
+            return
+        }
+        res.json(data)
+    })  
+}
