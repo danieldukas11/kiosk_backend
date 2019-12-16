@@ -543,7 +543,20 @@ exports.updateIngrMenu=(req,res,next)=>{
 
 }
 exports.updateIngredient=(req,res,next)=>{
-
+    let ingr={
+        title:req.body.title,
+        light_price:req.body.light_price,
+        double_price:req.body.double_price,
+        normal_price:req.body.normal_price,
+        price:req.body.normal_price,       
+    }
+    ingrTypeModel.updateOne({_id:req.body._id},ingr,(err,data)=>{
+        if (err){
+            res.status(400).json(err)
+            return
+        }
+        res.json(data)
+    })
 }
 exports.updateProdMenu=(req,res,next)=>{
     prodMenuModel.updateOne({_id:req.body._id},{title:req.body.title},(err,data)=>{
