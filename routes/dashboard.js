@@ -14,7 +14,7 @@ var storage = multer.diskStorage({
   })
   var storage2 = multer.diskStorage({
     destination: function (req, file, cb) {
-      if (!fs.existsSync('public/videos')){
+      if (!fs.existsSync('public/videos')){ 
         fs.mkdirSync('public/videos');
     }
       cb(null, 'public/videos')
