@@ -72,7 +72,7 @@ server.listen(PORT, () => {
 
 io.on("connection",(socket)=>{
     socket.on("closeEvent",(data)=>{
-        orderModel.updateMany(
+        orderModel.updateMany( 
             {action:{ $ne: "closed" }},
             {$set:{action:"closed"}},
             (err,data)=>{
