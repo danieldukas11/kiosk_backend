@@ -556,7 +556,7 @@ exports.updateIngredient=(req,res,next)=>{
         normal_price:req.body.price,
         price:req.body.price,       
     }
-    console.log(req.body)
+    console.log(req)
     
     ingrTypeModel.updateOne({_id:req.body._id},ingr,(err,data)=>{
         if (err){
