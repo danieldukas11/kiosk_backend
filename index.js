@@ -39,7 +39,7 @@ var corsOptions = {
   app.use("/kitchen_kiosk/", express.static( __dirname + '/kitchen' ));
   app.use("/progress-monitor/", express.static( __dirname + '/progress-monitor' ));
  
-mongoose.connect('mongodb+srv://adminkiosk:emil094641864@kiosk-usxqr.mongodb.net/kiosk', {useNewUrlParser: true, useUnifiedTopology: true}, (err,db) => {
+mongoose.connect('mongodb://64.225.3.114/kiosk', {useNewUrlParser: true, useUnifiedTopology: true}, (err,db) => {
     // throw new Error(err);
 });
 var conn = mongoose.connection;
@@ -65,7 +65,7 @@ app.get('/kitchen_kiosk', (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, './kiosk-dashboard/index.html'));
 });
-const PORT = process.env.PORT || 3500;
+const PORT = process.env.PORT || 80;
 server.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`); 
 });
