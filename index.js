@@ -40,7 +40,6 @@ var corsOptions = {
   app.use("/progress-monitor/", express.static( __dirname + '/progress-monitor' ));
  
 mongoose.connect('mongodb://64.225.3.114/kiosk', {
-    auth: { authSource: "admin" },
     user: "kioskAdmin",
     pass: "39%YLaW)gnuE^z%q",
     useNewUrlParser: true, 
