@@ -40,6 +40,7 @@ var corsOptions = {
   app.use("/progress-monitor/", express.static( __dirname + '/progress-monitor' ));
  
 mongoose.connect('mongodb://64.225.3.114/kiosk', {
+    auth: { authSource: "admin" },
     user: "kioskAdmin",
     pass: "39%YLaW)gnuE^z%q",
     useNewUrlParser: true, 
@@ -69,7 +70,7 @@ app.get('/kitchen_kiosk', (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, './kiosk-dashboard/index.html'));
 });
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT ||80;
 server.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`); 
 });
