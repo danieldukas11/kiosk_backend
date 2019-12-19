@@ -39,7 +39,7 @@ var corsOptions = {
   app.use("/kitchen_kiosk/", express.static( __dirname + '/kitchen' ));
   app.use("/progress-monitor/", express.static( __dirname + '/progress-monitor' ));
  
-mongoose.connect('mongodb://64.225.3.114/kiosk', {useNewUrlParser: true, useUnifiedTopology: true}, (err,db) => {
+mongoose.connect('mongodb://kioskAdmin:39%YLaW)gnuE^z%q@64.225.3.114/kiosk', {useNewUrlParser: true, useUnifiedTopology: true}, (err,db) => {
     // throw new Error(err);
 });
 var conn = mongoose.connection;
