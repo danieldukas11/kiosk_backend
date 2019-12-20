@@ -576,6 +576,39 @@ exports.updateProdMenu=(req,res,next)=>{
     })  
 }
 exports.updateProduct=(req,res,next)=>{
+    let prod={
+        title: req.body.title,
+        price: req.body.price,
+        sizable: req.body.sizable,
+        customizable: req.body.customizable,
+    }
+    if(req.body.sizable){
+        prod.sizes=req.body.sizes
+    }
+    if(prod.sizable&&req.body.sizes){          
+        prod.sizes=JSON.parse(req.body.sizes);
+        prod.size=prod.sizes[1];
+        prod.price=prod.size.price     
+          
+    }
+    if(prod.customizable){
+        if(req.body.defaultIngredients&&req.body.defaultIngredients.length) {
+            let a=0
+            let ingr=JSON.parse(req.body.defaultIngredients)
+            ingr.forEach(ing => {
+                a+=ing.price
+            });              
+            prod.price=a 
+        }
+     }
+
+    productModel.updateOne({_id:req.body._id},prod,(err,data)=>{
+        if (err){
+            res.status(400).json(err)
+            return
+        }
+        res.json(data)
+    })  
 
 }
 exports.updateCombo=(req,res,next)=>{
@@ -598,7 +631,7 @@ exports.updateComboMenu=(req,res,next)=>{
 }
 
 exports.updateComboProd=(req,res,next)=>{
-
+    
 }
 exports.updateUser = (req,res,next)=>{
     let usr={
