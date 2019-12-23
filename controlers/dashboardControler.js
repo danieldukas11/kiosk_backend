@@ -37,7 +37,7 @@ exports.login=(req, res, next)=>{
                         userName:user.userName,
                         role:user.role
                     }
-                    jwt.sign({ data:data},JWTKey,{expiresIn: '7d'},(err,token)=>{
+                    jwt.sign({ data:data},JWTKey,{expiresIn: '168h'},(err,token)=>{
                         res.json(token)
                     })                    
                 }
