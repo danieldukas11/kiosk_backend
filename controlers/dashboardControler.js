@@ -37,10 +37,10 @@ exports.login=(req, res, next)=>{
                         userName:user.userName,
                         role:user.role
                     }
-                    jwt.sign({ data:data},JWTKey,{expiresIn: '604800000‬ms'},(err,token)=>{
+                    jwt.sign({ data:data},JWTKey,{expiresIn: '7d'},(err,token)=>{
                         res.json(token)
                     })                    
-                } 
+                }
                 else{
                     res.status(400).json("Wrong user name or password") 
                 }
