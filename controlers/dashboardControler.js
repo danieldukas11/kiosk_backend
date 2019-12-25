@@ -174,6 +174,7 @@ exports.addProduct=(req,res,next)=>{
     let decoded = getUser(req)
        let dat={} 
        dat.customizable=req.body.customizable;
+       console.log(req.body)
        dat.sizable=req.body.sizable;
        dat.title=req.body.title;
        dat.image=req.file.filename
