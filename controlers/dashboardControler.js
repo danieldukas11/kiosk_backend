@@ -202,7 +202,7 @@ exports.addProduct=(req,res,next)=>{
             dat.price=req.body.price
         }
         productModel.create(dat,(err,product)=>{
-            console.log(product)
+            console.log(product,"yyhtrerghewsgsrd")
            if(dat.customizable){
             let defingr=JSON.parse(req.body.defaultIngr)
                 if(defingr&&defingr.length){
