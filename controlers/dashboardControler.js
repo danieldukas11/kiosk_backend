@@ -534,7 +534,7 @@ exports.addAdVideo=(req,res,next)=>{
 }
 exports.getprogressMonitorData=(req,res,next)=>{
     let decoded = getUser(req) 
-    progressModel.find({_id:decoded.id},(err,data)=>{
+    progressModel.find({user_id:decoded.id},(err,data)=>{
         res.json(data)
     })
 }
