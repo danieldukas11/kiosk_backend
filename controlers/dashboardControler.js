@@ -173,8 +173,8 @@ exports.addIngredient=(req,res,next)=>{
 exports.addProduct=(req,res,next)=>{  
     let decoded = getUser(req)
        let dat={} 
-       dat.customizable=Boolean(req.body.customizable);
-       dat.sizable=Boolean(req.body.sizable);
+       dat.customizable=req.body.customizable;
+       dat.sizable=req.body.sizable;
        dat.title=req.body.title;
        dat.image=req.file.filename
        dat.menu_ids=JSON.parse(req.body.menu_ids)
@@ -201,9 +201,9 @@ exports.addProduct=(req,res,next)=>{
         if(req.body.price&&dat.customizable!="true"&&dat.sizable!="true"){
             dat.price=req.body.price
         }
+        console.log(dat)
         productModel.create(dat,(err,product)=>{
-            console.log(product,"yyhtrerghewsgsrd")
-           if(dat.customizable){
+           if(product.customizable){
             let defingr=JSON.parse(req.body.defaultIngr)
                 if(defingr&&defingr.length){
                     defingr.forEach(ding => {
