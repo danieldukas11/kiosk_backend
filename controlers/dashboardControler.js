@@ -659,7 +659,7 @@ exports.updateUser = (req,res,next)=>{
        lastName:req.body.lastName, 
     }
     userModel.updateOne({_id:req.body._id},usr,(err,data)=>{
-        if (err){
+        if (err){ 
             res.status(400).json(err)
             return
         }
