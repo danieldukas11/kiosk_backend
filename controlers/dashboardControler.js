@@ -190,13 +190,12 @@ exports.addProduct=(req,res,next)=>{
            if(req.body.defaultIngr&&req.body.defaultIngr.length) {
                let a=0
                let ingr=JSON.parse(req.body.defaultIngr)
-               console.log(ingr)
                ingr.forEach(ing => {
-                   a+=ing.price
+                   a+=Number(ing.price)
                });              
                dat.price=a 
            }
-           console.log(dat.price)
+           
         }
         if(req.body.price&&dat.customizable!="true"&&dat.sizable!="true"){
             dat.price=req.body.price
