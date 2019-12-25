@@ -203,7 +203,7 @@ exports.addProduct=(req,res,next)=>{
         }
         productModel.create(dat,(err,product)=>{
             console.log(product)
-           if(product.customizable){
+           if(dat.customizable){
             let defingr=JSON.parse(req.body.defaultIngr)
                 if(defingr&&defingr.length){
                     defingr.forEach(ding => {
