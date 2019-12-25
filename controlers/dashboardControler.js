@@ -190,6 +190,7 @@ exports.addProduct=(req,res,next)=>{
            if(req.body.defaultIngr&&req.body.defaultIngr.length) {
                let a=0
                let ingr=JSON.parse(req.body.defaultIngr)
+               console.log(ingr)
                ingr.forEach(ing => {
                    a+=Number(ing.price)
                });              
@@ -200,7 +201,7 @@ exports.addProduct=(req,res,next)=>{
         if(req.body.price&&dat.customizable!="true"&&dat.sizable!="true"){
             dat.price=req.body.price
         }
-        console.log(dat)
+        
         productModel.create(dat,(err,product)=>{
            if(product.customizable){
             let defingr=JSON.parse(req.body.defaultIngr)
