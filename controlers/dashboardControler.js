@@ -211,7 +211,7 @@ exports.addProduct=(req,res,next)=>{
                             let pringr=JSON.parse(req.body.prodIngr)
                             if(pringr&&pringr.length){
                                 pringr.forEach(ing=>{
-                                    ingrModel.updateOne({_id:ing._id},{$push:{product_ids:product._id}},(err,ingr)=>{
+                                    ingrModel.updateOne({_id:ing},{$push:{product_ids:product._id}},(err,ingr)=>{
                                         
                                     })
                                 })
@@ -608,7 +608,27 @@ exports.updateProduct=(req,res,next)=>{
             res.status(400).json(err)
             return
         }
-        res.json(data)
+        if(prod.customizable){
+            let defingr=JSON.parse(req.body.defaultIngredients)
+                if(defingr&&defingr.length){
+                    defingr.forEach(ding => {
+                        ingrTypeModel.updateOne({_id:ding._id},{$push:{default_ids:product._id}},(err,ingr)=>{
+                            let pringr=JSON.parse(req.body.prodIngr)
+                            if(pringr&&pringr.length){
+                                pringr.forEach(ing=>{
+                                    ingrModel.updateOne({_id:ing},{$push:{product_ids:product._id}},(err,ingr)=>{
+                                        
+                                    })
+                                })
+                            }
+                        })
+                    });              
+                }
+                res.json(product)
+            }
+            else{
+                res.json(product)
+            }
     })  
 
 }
@@ -631,9 +651,7 @@ exports.updateComboMenu=(req,res,next)=>{
     })  
 }
 
-exports.updateComboProd=(req,res,next)=>{
-    
-}
+
 exports.updateUser = (req,res,next)=>{
     let usr={
        email:req.body.email,
@@ -648,3 +666,4 @@ exports.updateUser = (req,res,next)=>{
         res.json(data)
     })  
 }
+

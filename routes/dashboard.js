@@ -5,7 +5,7 @@ var storage = multer.diskStorage({
     destination: function (req, file, cb) {
       if (!fs.existsSync('public/images')){
         fs.mkdirSync('public/images');
-    }
+      }
       cb(null, 'public/images')
     },
     filename: function (req, file, cb) {
@@ -64,5 +64,5 @@ let videoUpload=multer({ storage:storage2})
  router.delete('/admin/combo_prod/delete',dashboardController.deleteComboProd);
 
  router.post("/admin/ads/video/add",videoUpload.single("adVideo"),dashboardController.addAdVideo)
- router.get('/admin/progress_monitor',dashboardController.getUsers);
+ router.get('/admin/progress_monitor',dashboardController.getprogressMonitorData);
   module.exports = router;
