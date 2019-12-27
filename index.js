@@ -56,6 +56,7 @@ conn.once('open', function () {
 });
 app.use("/user_kiosk", require('./routes/user-kiosk'));
 app.use("/dashboard", require('./routes/dashboard'));
+app.use("/kitchn", require('./routes/kitchen-kiosk'));
 app.get('/usr_kiosk/*', (req, res) => {
     res.sendFile(path.join(__dirname, './kiosk/index.html'));
 
