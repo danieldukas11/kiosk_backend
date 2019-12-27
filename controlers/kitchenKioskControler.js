@@ -1,5 +1,6 @@
 const userModel=require("../models/user");
 const bcrypt = require('bcrypt');
+const jwt=require('jsonwebtoken');
 exports.login=(req, res, next)=>{
     userModel.findOne({$or:[{userName:req.body.email},{email:req.body.email}]},(err,user)=>{
       if(err){
