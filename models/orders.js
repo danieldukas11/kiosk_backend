@@ -8,6 +8,8 @@ let OrderSchema=new Schema({
     tip:Number,
     total:Number,
     action:{ type : String, default: "pending" },
-    orderDate:{ type : Date, default: Date.now }
+    orderDate:{ type : Date, default: Date.now },
+    code:String,
+    ispaid:Boolean
 })
 module.exports = mongoose.model('order', OrderSchema); 

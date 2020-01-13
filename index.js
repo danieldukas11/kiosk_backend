@@ -5,7 +5,7 @@ var cors = require('cors');
 let path=require('path')
 let fs=require("fs")
 global.io = require('socket.io')(server);
-let orderModel=require('./models/oprders')
+let orderModel=require('./models/orders')
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
@@ -57,6 +57,7 @@ conn.once('open', function () {
 app.use("/user_kiosk", require('./routes/user-kiosk'));
 app.use("/dashboard", require('./routes/dashboard'));
 app.use("/kitchn", require('./routes/kitchen-kiosk'));
+app.use("/pay", require('./routes/pay'))
 app.get('/usr_kiosk/*', (req, res) => {
     res.sendFile(path.join(__dirname, './kiosk/index.html'));
 
@@ -71,7 +72,7 @@ app.get('/kitchen_kiosk', (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, './kiosk-dashboard/index.html'));
 });
-const PORT = process.env.PORT ||80;
+const PORT = process.env.PORT ||3000;
 server.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`); 
 });
