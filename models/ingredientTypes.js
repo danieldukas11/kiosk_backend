@@ -2,7 +2,6 @@ let ingrSchema=new Schema({
     title:String, 
     image:String ,  
     price:Number,
-    normal_price:Number,
     light_price:Number,
     double_price:Number,
     ingredient_ids:[ObjectId],

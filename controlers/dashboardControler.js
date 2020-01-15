@@ -160,10 +160,21 @@ exports.addProdMenu=(req,res,next)=>{
 }
 exports.addIngredient=(req,res,next)=>{  
     let decoded = getUser(req)
-    let data=req.body
-    data.user_id=decoded.id
-    data.normal_price=data.price
-    data.image=req.file.filename
+    let data={
+        user_id:decoded.id,   
+        image:req.file.filename,
+        title:req.body.title,
+        ingredient_ids:req.body.ingredient_ids
+    }
+    if(req.body.price){
+        data.price=req.body.price
+    }
+    if(req.body.light_price){
+        data.price=req.body.light_price
+    }
+    if(req.body.double_price){
+        data.price=req.body.double_price
+    }
 
     ingrTypeModel.create(data,(err,ingr)=>{
         res.json(ingr);
