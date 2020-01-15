@@ -166,16 +166,17 @@ exports.addIngredient=(req,res,next)=>{
         title:req.body.title,
         ingredient_ids:req.body.ingredient_ids
     }
-    if(req.body.price){
+    if(req.body.price&&req.body.price!=="undefined"){
         data.price=req.body.price
     }
-    if(req.body.light_price){
-        data.price=req.body.light_price
+    if(req.body.light_price&&req.body.double_price!=="undefined"){
+        data.light_price=req.body.light_price
     }
-    if(req.body.double_price){
-        data.price=req.body.double_price
+    if(req.body.double_price&&req.body.double_price!=="undefined"){
+        data.double_price=req.body.double_price
     }
 
+    console.log()
     ingrTypeModel.create(data,(err,ingr)=>{
         res.json(ingr);
     })    
