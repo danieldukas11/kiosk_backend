@@ -175,7 +175,6 @@ exports.addIngredient=(req,res,next)=>{
     if(req.body.double_price&&req.body.double_price!=="undefined"){
         data.double_price=req.body.double_price
     }
-
     ingrTypeModel.create(data,(err,ingr)=>{
         res.json(ingr);
     })    
