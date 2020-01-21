@@ -573,19 +573,19 @@ exports.updateIngredient=(req,res,next)=>{
         ingr.price=req.body.price
     }
     else{
-        ingr.price="null"
+        ingr.price=null
     }
     if(req.body.light_price&&req.body.double_price!=="undefined"){
         ingr.light_price=req.body.light_price
     }
     else{
-        ingr.light_price="null"
+        ingr.light_price=null
     }
     if(req.body.double_price&&req.body.double_price!=="undefined"){
         ingr.double_price=req.body.double_price
     }
     else{
-        ingr.double_price="null"
+        ingr.double_price=null
     }
     
     ingrTypeModel.updateOne({_id:req.body._id},ingr,(err,data)=>{
