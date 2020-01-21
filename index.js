@@ -55,7 +55,7 @@ app.get('/kitchen_kiosk', (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, './kiosk-dashboard/index.html'));
 });
-const PORT = process.env.PORT ||3000;
+const PORT = process.env.PORT ||80;
 server.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`); 
 });
