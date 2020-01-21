@@ -176,7 +176,6 @@ exports.addIngredient=(req,res,next)=>{
         data.double_price=req.body.double_price
     }
 
-    console.log()
     ingrTypeModel.create(data,(err,ingr)=>{
         res.json(ingr);
     })    
@@ -562,14 +561,22 @@ exports.updateIngrMenu=(req,res,next)=>{
 
 }
 exports.updateIngredient=(req,res,next)=>{
+    let decoded = getUser(req)
     let ingr={
+         
         title:req.body.title,
-        light_price:req.body.light_price,
-        double_price:req.body.double_price,
-        normal_price:req.body.normal_price,
-        price:req.body.normal_price,       
+      
+        user_id:decoded.id,        
     }
-    console.log(req)
+    if(req.body.price&&req.body.price!=="undefined"){
+        ingr.price=req.body.price
+    }
+    if(req.body.light_price&&req.body.double_price!=="undefined"){
+        ingr.light_price=req.body.light_price
+    }
+    if(req.body.double_price&&req.body.double_price!=="undefined"){
+        ingr.double_price=req.body.double_price
+    }
     
     ingrTypeModel.updateOne({_id:req.body._id},ingr,(err,data)=>{
         if (err){
@@ -578,6 +585,13 @@ exports.updateIngredient=(req,res,next)=>{
         }
         res.json(data)
     })
+
+
+
+
+   
+
+    
 }
 exports.updateProdMenu=(req,res,next)=>{
     prodMenuModel.updateOne({_id:req.body._id},{title:req.body.title},(err,data)=>{

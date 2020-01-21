@@ -10,27 +10,10 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
 
-
-function base64_encode(file) {
-    // read binary data
-    var bitmap = fs.readFileSync(file);
-    // convert binary data to base64 encoded string
-    return new Buffer(bitmap).toString('base64');
-}
-
-// function to create file from base64 encoded string
-function base64_decode(base64str, file) {
-    // create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
-    var bitmap = new Buffer(base64str, 'base64');
-    // write buffer to file
-    fs.writeFileSync(file, bitmap);
-    console.log('******** File created from base64 encoded string ********');
-}
-
-var corsOptions = {
-    origin: 'localhost:4200',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  }
+// var corsOptions = {
+//     origin: 'localhost:4200',
+//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+//   }
   
   app.use(cors());
   app.use(express.static('public'));
@@ -72,7 +55,7 @@ app.get('/kitchen_kiosk', (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, './kiosk-dashboard/index.html'));
 });
-const PORT = process.env.PORT ||80;
+const PORT = process.env.PORT ||3000;
 server.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`); 
 });
