@@ -169,7 +169,7 @@ exports.addIngredient=(req,res,next)=>{
     if(req.body.price&&req.body.price!=="undefined"){
         data.price=req.body.price
     }
-    if(req.body.light_price&&req.body.double_price!=="undefined"){
+    if(req.body.light_price&&req.body.light_price!=="undefined"){
         data.light_price=req.body.light_price
     }
     if(req.body.double_price&&req.body.double_price!=="undefined"){
@@ -562,7 +562,6 @@ exports.updateIngrMenu=(req,res,next)=>{
 }
 exports.updateIngredient=(req,res,next)=>{
     let decoded = getUser(req)
-    let d1={};
     let ingr={
          
         title:req.body.title,
@@ -575,7 +574,7 @@ exports.updateIngredient=(req,res,next)=>{
     else{
         ingr.price=null
     }
-    if(req.body.light_price&&req.body.double_price!=="undefined"){
+    if(req.body.light_price&&req.body.light_price!=="undefined"){
         ingr.light_price=req.body.light_price
     }
     else{
