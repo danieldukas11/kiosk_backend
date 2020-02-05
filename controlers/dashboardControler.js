@@ -183,14 +183,14 @@ exports.addIngredient=(req,res,next)=>{
 exports.addProduct=(req,res,next)=>{  
     let decoded = getUser(req)
        let dat={} 
-       dat.customizable=req.body.customizable;
-       dat.sizable=req.body.sizable;
+      // dat.customizable=req.body.customizable;
+      // dat.sizable=req.body.sizable;
        dat.title=req.body.title;
        dat.image=req.file.filename
        dat.menu_ids=JSON.parse(req.body.menu_ids)
        dat.user_id=decoded.id
       
-       if(dat.sizable&&req.body.sizes){          
+     /*  if(dat.sizable&&req.body.sizes){          
            dat.sizes=JSON.parse(req.body.sizes);
            dat.size=dat.sizes[1];
            dat.price=dat.size.price     
@@ -207,12 +207,12 @@ exports.addProduct=(req,res,next)=>{
                dat.price=a 
            }
            
-        }
+        }*/
         if(req.body.price&&dat.customizable!="true"&&dat.sizable!="true"){
             dat.price=req.body.price
         }
         
-        productModel.create(dat,(err,product)=>{
+       /* productModel.create(dat,(err,product)=>{
            if(product.customizable){
             let defingr=JSON.parse(req.body.defaultIngr)
                 if(defingr&&defingr.length){
@@ -235,7 +235,7 @@ exports.addProduct=(req,res,next)=>{
                 res.json(product)
             }
             
-        })    
+        })  */  
 
 }
 
@@ -342,16 +342,24 @@ exports.deleteIngredient=(req,res,next)=>{
             res.status(400).json(err)
             return
         }
-        fs.unlink(`./public/images/${data.image}`, function (err) {
-            if (err){
-                res.status(400).json(err)
-                return
-            }
-            // if no error, file has been deleted successfully
+        if (fs.existsSync(`public/images${data.image}`)){
+            fs.unlink(`./public/images/${data.image}`, function (err) {
+                if (err){
+                    res.status(400).json(err)
+                    return
+                }
+                // if no error, file has been deleted successfully
+                ingrTypeModel.findOneAndDelete({_id:req.query.id},(err,data)=>{
+                    res.json(data)
+                })
+            });
+        }
+        else{
             ingrTypeModel.findOneAndDelete({_id:req.query.id},(err,data)=>{
                 res.json(data)
             })
-        });
+        }
+        
     }) 
         
 }
@@ -585,18 +593,37 @@ exports.updateIngredient=(req,res,next)=>{
     else{
         ingr.double_price=null
     }
-    
-    ingrTypeModel.updateOne({_id:req.body._id},ingr,(err,data)=>{
+    if(req.file){
+        ingr.image=req.file.filename
+    }
+    ingrTypeModel.findOne({_id:req.body._id},(err,data)=>{
         if (err){
             res.status(400).json(err)
             return
         }
-        res.json(data)
+        console.log(data)
+       
+
+        ingrTypeModel.updateOne({_id:req.body._id},ingr,(err,newData)=>{
+            if (err){
+                res.status(400).json(err)
+                return
+            }
+            if (fs.existsSync(`./public/images/${data.image}`) && req.file) {
+                try{
+                    fs.unlinkSync(`./public/images/${data.image}`);
+                }
+                catch(err)
+                {
+                    return res.json(err)
+                }
+            }
+            res.json(newData)
+        })
+
     })
-
-
-
-
+    
+  
    
 
     
