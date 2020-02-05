@@ -162,7 +162,6 @@ exports.addIngredient=(req,res,next)=>{
     let decoded = getUser(req)
     let data={
         user_id:decoded.id,   
-        image:req.file.filename,
         title:req.body.title,
         ingredient_ids:req.body.ingredient_ids
     }
@@ -175,9 +174,13 @@ exports.addIngredient=(req,res,next)=>{
     if(req.body.double_price&&req.body.double_price!=="undefined"){
         data.double_price=req.body.double_price
     }
+    if(req.file){
+        data.image=req.file.filename;
+    }
     ingrTypeModel.create(data,(err,ingr)=>{
         res.json(ingr);
     })    
+
 }
 
 exports.addProduct=(req,res,next)=>{  
