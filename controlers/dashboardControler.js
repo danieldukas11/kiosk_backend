@@ -186,63 +186,90 @@ exports.addIngredient=(req,res,next)=>{
 exports.addProduct=(req,res,next)=>{  
     let decoded = getUser(req)
        let dat={} 
-      // dat.customizable=req.body.customizable;
-      // dat.sizable=req.body.sizable;
        dat.title=req.body.title;
        if(req.file){
         dat.image=req.file.filename
        }
-      console.log(req.body.menu_ids, typeof req.body.menu_ids)
+       dat.customizable=req.body.customizable;
+       dat.sizable=req.body.sizable;
+       dat.price=req.body.price;
+      
+       
        dat.menu_ids=JSON.parse(req.body.menu_ids)
        dat.user_id=decoded.id
       
+       console.log(req.body)
      /*  if(dat.sizable&&req.body.sizes){          
            dat.sizes=JSON.parse(req.body.sizes);
            dat.size=dat.sizes[1];
            dat.price=dat.size.price     
              
         }
-        if(dat.customizable){
-           if(req.body.defaultIngr&&req.body.defaultIngr.length) {
-               let a=0
-               let ingr=JSON.parse(req.body.defaultIngr)
-               console.log(ingr)
-               ingr.forEach(ing => {
-                   a+=Number(ing.price)
-               });              
-               dat.price=a 
-           }
-           
-        }*/
-        if(req.body.price&&dat.customizable!="true"&&dat.sizable!="true"){
-            dat.price=req.body.price
-        }
+      */      
         
-       /* productModel.create(dat,(err,product)=>{
-           if(product.customizable){
-            let defingr=JSON.parse(req.body.defaultIngr)
-                if(defingr&&defingr.length){
-                    defingr.forEach(ding => {
-                        ingrTypeModel.updateOne({_id:ding._id},{$push:{default_ids:product._id}},(err,ingr)=>{
-                            let pringr=JSON.parse(req.body.prodIngr)
-                            if(pringr&&pringr.length){
-                                pringr.forEach(ing=>{
-                                    ingrModel.updateOne({_id:ing},{$push:{product_ids:product._id}},(err,ingr)=>{
-                                        
-                                    })
-                                })
+        productModel.create(dat,(err,product)=>{
+            if(product.customizable){
+                let defingr=JSON.parse(req.body.defaultIngr);
+                let pringr=JSON.parse(req.body.prodIngr);
+                let optIngr=JSON.parse(req.body.optionalIngr);
+                if(pringr&&pringr.length){
+                    ingrModel.updateMany(
+                        { _id: { $in:pringr } },
+                        {$push:{product_ids:product._id}},
+                        (err,data)=>{
+                            if(err){
+                                return res.json(err)
                             }
-                        })
-                    });              
-                }
-                res.json(product)
+                            if(defingr&&defingr.length){
+                                ingrTypeModel.updateMany(
+                                    { _id: { $in:defingr } },
+                                    {$push:{default_ids:product._id}},
+                                    (err,data)=>{
+                                        if(err){
+                                            return res.json(err)
+                                        }
+                                        if(optIngr&&optIngr.length){
+                                            ingrTypeModel.updateMany(
+                                                { _id: { $in:optIngr } },
+                                                {$push:{optional_ids:product._id}},
+                                                (err,data)=>{
+                                                    if(err){
+                                                        return res.json(err)
+                                                    }
+                                                    return res.json(product)                                                    
+                        
+                                                }
+                                            )
+            
+                                        }
+                                        else{
+                                            return res.json(product)
+                                        }
+                                        
+            
+                                    }
+                                )
+
+                            }
+                            else{
+                                return res.json(product)
+                            }
+                            
+
+                        }
+                    )
+
+                } 
+                else{
+                    return res.json(product)
+                } 
+                
             }
             else{
                 res.json(product)
             }
-            
-        })  */  
-        res.json("sdsds")
+        })  
+        //res.json("sdsds")
 
 }
 
