@@ -189,7 +189,10 @@ exports.addProduct=(req,res,next)=>{
       // dat.customizable=req.body.customizable;
       // dat.sizable=req.body.sizable;
        dat.title=req.body.title;
-       dat.image=req.file.filename
+       if(req.file){
+        dat.image=req.file.filename
+       }
+      
        dat.menu_ids=JSON.parse(req.body.menu_ids)
        dat.user_id=decoded.id
       
