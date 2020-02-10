@@ -192,7 +192,7 @@ exports.addProduct=(req,res,next)=>{
        if(req.file){
         dat.image=req.file.filename
        }
-      
+      console.log(req.body.menu_ids, typeof req.body.menu_ids)
        dat.menu_ids=JSON.parse(req.body.menu_ids)
        dat.user_id=decoded.id
       
