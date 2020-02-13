@@ -694,6 +694,10 @@ exports.updateProduct=(req,res,next)=>{
         prod.price=prod.size.price     
           
     }
+    else{
+        prod.sizes=[]
+        prod.size=null;
+    }
     
 productModel.findOne({_id:req.body._id},(err,prod)=>{
     if(req.file){
