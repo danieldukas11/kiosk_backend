@@ -684,18 +684,28 @@ exports.updateProduct=(req,res,next)=>{
         prod.image=req.file.filename
     }
     else{
-        prod.image=null
+        prod.image=req.body.image_name
     }
-       /* 
+      
     
     if(prod.sizable&&req.body.sizes){          
         prod.sizes=JSON.parse(req.body.sizes);
-        prod.size=prod.sizes[1];
+        prod.size=prod.sizes[0];
         prod.price=prod.size.price     
           
-    }*/
+    }
     
-
+productModel.findOne({_id:req.body._id},(err,prod)=>{
+    if(req.file){
+        if (fs.existsSync(`public/images${prod.image}`)){
+            fs.unlinkSync(`./public/images/${prod.image}`)
+        }
+    }
+    else if(req.body.image_name){
+        if (fs.existsSync(`public/images${prod.image}`)){
+            fs.unlinkSync(`./public/images/${prod.image}`)
+        } 
+    }
     productModel.updateOne({_id:req.body._id},prod,(err,data)=>{
         if (err){
             console.log(err)
@@ -755,16 +765,19 @@ exports.updateProduct=(req,res,next)=>{
                             if (err){
                                 return res.status(400).json(err)           
                             }
+                            
                             res.json("updated")
                             
                         })
                     })
-
                 })
             })
         })        
          
     })
+
+})
+  
 
 }
 exports.updateCombo=(req,res,next)=>{
