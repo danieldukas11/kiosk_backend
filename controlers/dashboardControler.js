@@ -197,15 +197,15 @@ exports.addProduct=(req,res,next)=>{
        
        dat.menu_ids=JSON.parse(req.body.menu_ids)
        dat.user_id=decoded.id
-       if(prod.sizable&&req.body.sizes){          
-        prod.sizes=JSON.parse(req.body.sizes);
-        prod.size=prod.sizes[0];
-        prod.price=Number(prod.size.price)     
+       if(dat.sizable&&req.body.sizes){          
+        dat.sizes=JSON.parse(req.body.sizes);
+        dat.size=dat.sizes[0];
+        dat.price=Number(dat.size.price)     
           
     }
     else{
-        prod.sizes=[]
-        prod.size=null;
+        dat.sizes=[]
+        dat.size=null;
     }
         
         productModel.create(dat,(err,product)=>{
