@@ -5,11 +5,14 @@ var storage = multer.diskStorage({
     destination: function (req, file, cb) {
       if (!fs.existsSync('public/images')){
         fs.mkdirSync('public/images');
+        
       }
-      cb(null, 'public/images')
+      cb(null, 'public/images');
+
     },
     filename: function (req, file, cb) {
-      cb(null, file.fieldname + '-' + Date.now()+"."+file.mimetype.split("/")[1])
+      cb(null, file.fieldname + '-' + Date.now()+"."+file.mimetype.split("/")[1]);
+     
     }
   })
   var storage2 = multer.diskStorage({
@@ -49,7 +52,7 @@ let videoUpload=multer({ storage:storage2})
  router.put('/admin/ingr_menu/update',dashboardController.updateIngrMenu); 
  router.put('/admin/ingredient/update',imgUpload.single('image'),dashboardController.updateIngredient);
  router.put('/admin/prod_menu/update',dashboardController.updateProdMenu);
- router.put('/admin/product/update',dashboardController.updateProduct);
+ router.put('/admin/product/update',imgUpload.single('image'),dashboardController.updateProduct);
  router.put('/admin/combo/update',dashboardController.updateCombo);
  router.put('/admin/combo_menu/update',dashboardController.updateComboMenu);
 

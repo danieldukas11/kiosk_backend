@@ -672,59 +672,106 @@ exports.updateProdMenu=(req,res,next)=>{
     })  
 }
 exports.updateProduct=(req,res,next)=>{
-    let prod={
-        title: req.body.title,
-        price: req.body.price,
-        sizable: req.body.sizable,
-        customizable: req.body.customizable,
+   
+    let prod={}
+    if(req.body.price){
+        prod.price=Number(req.body.price)
+    }
+    if(req.body.title){
+        prod.title=req.body.title
     }
     if(req.body.sizable){
-        prod.sizes=req.body.sizes
+        prod.sizable=req.body.sizable;
     }
+    if(req.body.menu_ids){
+        prod.menu_ids=JSON.parse(req.body.menu_ids)
+    }
+    if(req.body.customizable){
+        prod.customizable=req.body.customizable
+    }
+    if(req.file){
+        prod.image=req.file.filename
+    }
+       /* 
+    
     if(prod.sizable&&req.body.sizes){          
         prod.sizes=JSON.parse(req.body.sizes);
         prod.size=prod.sizes[1];
         prod.price=prod.size.price     
           
-    }
-    if(prod.customizable){
-        if(req.body.defaultIngredients&&req.body.defaultIngredients.length) {
-            let a=0
-            let ingr=JSON.parse(req.body.defaultIngredients)
-            ingr.forEach(ing => {
-                a+=ing.price
-            });              
-            prod.price=a 
-        }
-     }
+    }*/
+    
 
     productModel.updateOne({_id:req.body._id},prod,(err,data)=>{
         if (err){
-            res.status(400).json(err)
-            return
+            console.log(err)
+            return res.status(400).json(err)           
         }
-        if(prod.customizable){
-            let defingr=JSON.parse(req.body.defaultIngredients)
-                if(defingr&&defingr.length){
-                    defingr.forEach(ding => {
-                        ingrTypeModel.updateOne({_id:ding._id},{$push:{default_ids:product._id}},(err,ingr)=>{
-                            let pringr=JSON.parse(req.body.prodIngr)
-                            if(pringr&&pringr.length){
-                                pringr.forEach(ing=>{
-                                    ingrModel.updateOne({_id:ing},{$push:{product_ids:product._id}},(err,ingr)=>{
-                                        
-                                    })
-                                })
-                            }
-                        })
-                    });              
+        let prodIngr=JSON.parse(req.body.prodIngr)
+        let optIngr=JSON.parse(req.body.optionalIngr)
+        let defIngr=JSON.parse(req.body.defaultIngr)
+        ingrModel.updateMany({},
+            {
+              $pull:{product_ids:req.body._id}
+            },
+            (err,data)=>{
+            if (err){
+                return res.status(400).json(err)           
+            }
+         
+            ingrModel.updateMany(
+                {
+                    _id: { $in:prodIngr } ,                        
+                },               
+                {$push:{product_ids:req.body._id}},
+               
+                (err,data)=>{
+                if (err){
+                    return res.status(400).json(err)           
                 }
-                res.json(product)
-            }
-            else{
-                res.json(product)
-            }
-    })  
+                ingrTypeModel.updateMany({},
+                    {
+                        $pull:{default_ids:req.body._id},
+                        $pull:{optional_ids:req.body._id}
+                    },
+                    (err,data)=>{
+                    if (err){
+                        return res.status(400).json(err)           
+                    }
+
+                    ingrTypeModel.updateMany(
+                        {
+                            _id: { $in:optIngr } , 
+                        },
+                        {
+                            $push:{optional_ids:req.body._id},
+                        },
+                        (err,data)=>{
+                        if (err){
+                            return res.status(400).json(err)           
+                        }
+                        ingrTypeModel.updateMany(
+                            {
+                                _id: { $in:defIngr} , 
+                            },
+                            {
+                                $push:{default_ids:req.body._id},
+                            },
+                            (err,data)=>{
+                            if (err){
+                                return res.status(400).json(err)           
+                            }
+                            res.json("updated")
+                            
+                        })
+                    })
+
+                })
+            })
+        })
+        
+         
+    })
 
 }
 exports.updateCombo=(req,res,next)=>{

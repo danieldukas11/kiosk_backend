@@ -184,7 +184,7 @@ exports.login=(req, res, next)=>{
         if(err){
             res.status(400).json(err)
             return
-        }
+        } 
         if(pass){
           terminalModel.findOne({$and:[{terminal_number:req.body.terminal},{user_id:user._id}]},(err,terminal)=>{
             if(err){
