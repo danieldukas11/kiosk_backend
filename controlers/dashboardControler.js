@@ -197,15 +197,16 @@ exports.addProduct=(req,res,next)=>{
        
        dat.menu_ids=JSON.parse(req.body.menu_ids)
        dat.user_id=decoded.id
-      
-       console.log(req.body)
-     /*  if(dat.sizable&&req.body.sizes){          
-           dat.sizes=JSON.parse(req.body.sizes);
-           dat.size=dat.sizes[1];
-           dat.price=dat.size.price     
-             
-        }
-      */      
+       if(prod.sizable&&req.body.sizes){          
+        prod.sizes=JSON.parse(req.body.sizes);
+        prod.size=prod.sizes[0];
+        prod.price=Number(prod.size.price)     
+          
+    }
+    else{
+        prod.sizes=[]
+        prod.size=null;
+    }
         
         productModel.create(dat,(err,product)=>{
             if(product.customizable){
@@ -662,7 +663,7 @@ exports.updateProdMenu=(req,res,next)=>{
         res.json(data)
     })  
 }
-exports.updateProduct=(req,res,next)=>{
+exports.updateProduct=async(req,res,next)=>{
    
     let prod={}
     if(req.body.price){
@@ -684,14 +685,12 @@ exports.updateProduct=(req,res,next)=>{
         prod.image=req.file.filename
     }
     else{
-        prod.image=req.body.image_name
+        prod.image=req.body.image
     }
-      
-    
     if(prod.sizable&&req.body.sizes){          
         prod.sizes=JSON.parse(req.body.sizes);
         prod.size=prod.sizes[0];
-        prod.price=prod.size.price     
+        prod.price=Number(prod.size.price)     
           
     }
     else{
@@ -699,17 +698,23 @@ exports.updateProduct=(req,res,next)=>{
         prod.size=null;
     }
     
-productModel.findOne({_id:req.body._id},(err,prod)=>{
-    if(req.file){
-        if (fs.existsSync(`public/images${prod.image}`)){
-            fs.unlinkSync(`./public/images/${prod.image}`)
+        let product=await productModel.findOne({_id:req.body._id})
+        .catch(err=>
+            {
+            return res.json(err)
+        })
+        
+        if (fs.existsSync(`./public/images/${product.image}`)) {
+            try{
+                fs.unlinkSync(`./public/images/${product.image}`);
+            }
+            catch(err)
+            {
+                return res.json(err)
+            }
         }
-    }
-    else if(req.body.image_name){
-        if (fs.existsSync(`public/images${prod.image}`)){
-            fs.unlinkSync(`./public/images/${prod.image}`)
-        } 
-    }
+    
+    
     productModel.updateOne({_id:req.body._id},prod,(err,data)=>{
         if (err){
             console.log(err)
@@ -769,9 +774,7 @@ productModel.findOne({_id:req.body._id},(err,prod)=>{
                             if (err){
                                 return res.status(400).json(err)           
                             }
-                            
-                            res.json("updated")
-                            
+                            res.json("updated")                            
                         })
                     })
                 })
@@ -779,9 +782,6 @@ productModel.findOne({_id:req.body._id},(err,prod)=>{
         })        
          
     })
-
-})
-  
 
 }
 exports.updateCombo=(req,res,next)=>{
