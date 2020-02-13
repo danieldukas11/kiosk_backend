@@ -761,6 +761,7 @@ exports.updateProduct=(req,res,next)=>{
                             if (err){
                                 return res.status(400).json(err)           
                             }
+                            console.log("sfsd")
                             res.json("updated")
                             
                         })
