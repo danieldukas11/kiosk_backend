@@ -452,15 +452,10 @@ exports.deleteProdMenu=(req,res,next)=>{
                     return
             }
             res.json(data)
-        })
-        
-       
-    })
-       
-    })
-   
+        })  
+    })       
+    })   
 }
-
 exports.deleteProduct=(req,res,next)=>{
     ingrModel.updateMany(
         { product_ids: { $in: req.query.id } },
@@ -490,10 +485,7 @@ exports.deleteProduct=(req,res,next)=>{
                         res.json(data)
                     })
                 })
-        })
-     
-
-    
+        })  
 }
 exports.deleteComboProd=(req,res,next)=>{
     productModel.updateMany(
@@ -549,8 +541,7 @@ exports.deleteCombo=(req,res,next)=>{
                         res.json(data)
                     })
                 })
-            }
-            )
+            })
     })
 }
 
@@ -692,6 +683,9 @@ exports.updateProduct=(req,res,next)=>{
     if(req.file){
         prod.image=req.file.filename
     }
+    else{
+        prod.image=null
+    }
        /* 
     
     if(prod.sizable&&req.body.sizes){          
@@ -761,7 +755,6 @@ exports.updateProduct=(req,res,next)=>{
                             if (err){
                                 return res.status(400).json(err)           
                             }
-                            console.log("sfsd")
                             res.json("updated")
                             
                         })
@@ -769,8 +762,7 @@ exports.updateProduct=(req,res,next)=>{
 
                 })
             })
-        })
-        
+        })        
          
     })
 
