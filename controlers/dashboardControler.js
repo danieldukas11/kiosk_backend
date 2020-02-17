@@ -684,8 +684,8 @@ exports.updateProduct=async(req,res,next)=>{
     if(req.file){
         prod.image=req.file.filename
     }
-    else{
-        prod.image=req.body.image
+    else if(req.body.image_name&& req.body.image_name!="undefined"){
+        prod.image=req.body.image_name
     }
     if(prod.sizable&&req.body.sizes){          
         prod.sizes=JSON.parse(req.body.sizes);
@@ -697,8 +697,10 @@ exports.updateProduct=async(req,res,next)=>{
         prod.sizes=[]
         prod.size=null;
     }
-    
-        let product=await productModel.findOne({_id:req.body._id})
+    let prodIngr=JSON.parse(req.body.prodIngr)
+    let optIngr=JSON.parse(req.body.optionalIngr)
+    let defIngr=JSON.parse(req.body.defaultIngr)
+    let product=await productModel.findOne({_id:req.body._id})
         .catch(err=>
             {
             return res.json(err)
@@ -715,73 +717,37 @@ exports.updateProduct=async(req,res,next)=>{
         }
     
     
-    productModel.updateOne({_id:req.body._id},prod,(err,data)=>{
-        if (err){
-            console.log(err)
-            return res.status(400).json(err)           
-        }
-        let prodIngr=JSON.parse(req.body.prodIngr)
-        let optIngr=JSON.parse(req.body.optionalIngr)
-        let defIngr=JSON.parse(req.body.defaultIngr)
-        ingrModel.updateMany({},
+    await productModel.updateOne({_id:req.body._id},prod)
+        .catch(err=>
             {
-              $pull:{product_ids:req.body._id}
-            },
-            (err,data)=>{
-            if (err){
-                return res.status(400).json(err)           
-            }
-         
-            ingrModel.updateMany(
-                {
-                    _id: { $in:prodIngr } ,                        
-                },               
-                {$push:{product_ids:req.body._id}},
-               
-                (err,data)=>{
-                if (err){
-                    return res.status(400).json(err)           
-                }
-                ingrTypeModel.updateMany({},
-                    {
-                        $pull:{default_ids:req.body._id},
-                        $pull:{optional_ids:req.body._id}
-                    },
-                    (err,data)=>{
-                    if (err){
-                        return res.status(400).json(err)           
-                    }
-
-                    ingrTypeModel.updateMany(
-                        {
-                            _id: { $in:optIngr } , 
-                        },
-                        {
-                            $push:{optional_ids:req.body._id},
-                        },
-                        (err,data)=>{
-                        if (err){
-                            return res.status(400).json(err)           
-                        }
-                        ingrTypeModel.updateMany(
-                            {
-                                _id: { $in:defIngr} , 
-                            },
-                            {
-                                $push:{default_ids:req.body._id},
-                            },
-                            (err,data)=>{
-                            if (err){
-                                return res.status(400).json(err)           
-                            }
-                            res.json("updated")                            
-                        })
-                    })
-                })
-            })
-        })        
-         
-    })
+            return res.json(err)
+        })
+   
+        await ingrModel.updateMany({},{$pull:{product_ids:req.body._id}})
+        .catch(err=>{
+            return res.json(err)
+        })
+        
+        await ingrModel.updateMany({_id: { $in:prodIngr }}, {$push:{product_ids:req.body._id}})
+        .catch(err=>{
+            return res.json(err)
+        })
+                
+        let a=await ingrTypeModel.updateMany({},{$pull:{default_ids:req.body._id,optional_ids:req.body._id}})
+        .catch(err=>{
+            return res.json(err)
+        })
+        console.log(prod,a) 
+    await  ingrTypeModel.updateMany( { _id: { $in:optIngr }},{$push:{optional_ids:req.body._id}})
+        .catch(err=>{
+            return res.json(err)
+        })                        
+    await ingrTypeModel.updateMany({_id: { $in:defIngr}},{$push:{default_ids:req.body._id}})
+        .catch(err=>{
+            return res.json(err)
+        })
+    
+    res.json("updated")
 
 }
 exports.updateCombo=(req,res,next)=>{
