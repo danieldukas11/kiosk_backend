@@ -689,13 +689,16 @@ exports.updateProduct=async(req,res,next)=>{
     if(prod.sizable&&req.body.sizes){    
         if(req.body.sizes&&req.body.sizes!="undefined"){
             prod.sizes=JSON.parse(req.body.sizes);
+            prod.size=prod.sizes[0];
+            prod.price=Number(prod.size.price) 
         }   
         else{
             prod.sizes=[] 
+            prod.size=null
+            prod.price=0
         }  
        
-        prod.size=prod.sizes[0];
-        prod.price=Number(prod.size.price)     
+            
           
     }
     else{
