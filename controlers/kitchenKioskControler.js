@@ -13,7 +13,7 @@ exports.login=(req, res, next)=>{
               res.status(400).json(err)
               return
           }
-          if(pass){            
+          if(pass){       
             let data={
                 id:user._id,
                 userName:user.userName,
