@@ -680,7 +680,7 @@ exports.updateProduct=async(req,res,next)=>{
     if(req.file){
         prod.image=req.file.filename
     }
-    else if((req.body.image_name&& req.body.image_name!="null")||(req.body.image_name&& req.body.image_name!="undefined")){
+    else if(req.body.image_name&& req.body.image_name!="null"){
         prod.image=req.body.image_name
     }
     else {
@@ -722,21 +722,21 @@ exports.updateProduct=async(req,res,next)=>{
             return res.json(err)
         })
    
-        await ingrModel.updateMany({},{$pull:{product_ids:req.body._id}})
+    await ingrModel.updateMany({},{$pull:{product_ids:req.body._id}})
         .catch(err=>{
             return res.json(err)
         })
         
-        await ingrModel.updateMany({_id: { $in:prodIngr }}, {$push:{product_ids:req.body._id}})
+    await ingrModel.updateMany({_id: { $in:prodIngr }}, {$push:{product_ids:req.body._id}})
         .catch(err=>{
             return res.json(err)
         })
                 
-        let a=await ingrTypeModel.updateMany({},{$pull:{default_ids:req.body._id,optional_ids:req.body._id}})
+    await ingrTypeModel.updateMany({},{$pull:{default_ids:req.body._id,optional_ids:req.body._id}})
         .catch(err=>{
             return res.json(err)
         })
-        console.log(prod,a) 
+       
     await  ingrTypeModel.updateMany( { _id: { $in:optIngr }},{$push:{optional_ids:req.body._id}})
         .catch(err=>{
             return res.json(err)
