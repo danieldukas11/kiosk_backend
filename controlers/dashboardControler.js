@@ -647,12 +647,8 @@ exports.updateIngredient=(req,res,next)=>{
             res.json(newData)
         })
 
-    })
-    
-  
+    }) 
    
-
-    
 }
 exports.updateProdMenu=(req,res,next)=>{
     prodMenuModel.updateOne({_id:req.body._id},{title:req.body.title},(err,data)=>{
@@ -688,7 +684,7 @@ exports.updateProduct=async(req,res,next)=>{
         prod.image=req.body.image_name
     }
     else {
-        prod.image=null
+        prod.image=""
     }
     if(prod.sizable&&req.body.sizes){          
         prod.sizes=JSON.parse(req.body.sizes);

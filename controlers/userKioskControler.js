@@ -18,7 +18,7 @@ exports.getMenu=(req, res, next)=>{
                 "menu_ids":0,
                 "special_ids":0,
                 "special_menu_ids":0,
-                "selected_ids":0
+                "selected_ids":0,                
               }
             },
             {
