@@ -686,8 +686,11 @@ exports.updateProduct=async(req,res,next)=>{
     else {
         prod.image=null
     }
-    if(prod.sizable&&req.body.sizes){          
-        prod.sizes=JSON.parse(req.body.sizes);
+    if(prod.sizable&&req.body.sizes){    
+        if(req.body.sizes){
+            prod.sizes=JSON.parse(req.body.sizes);
+        }      
+       
         prod.size=prod.sizes[0];
         prod.price=Number(prod.size.price)     
           
