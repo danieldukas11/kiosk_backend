@@ -680,11 +680,11 @@ exports.updateProduct=async(req,res,next)=>{
     if(req.file){
         prod.image=req.file.filename
     }
-    else if(req.body.image_name&& req.body.image_name!="undefined"){
+    else if((req.body.image_name&& req.body.image_name!="null")||(req.body.image_name&& req.body.image_name!="undefined")){
         prod.image=req.body.image_name
     }
     else {
-        prod.image=""
+        prod.image=null
     }
     if(prod.sizable&&req.body.sizes){          
         prod.sizes=JSON.parse(req.body.sizes);
