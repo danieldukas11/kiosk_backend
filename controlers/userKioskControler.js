@@ -1,18 +1,20 @@
 let menuModel=require('../models/menu');
 let specialModel=require('../models/special');
+let ing=require('../models/ingredientTypes')
 let terminalModel=require('../models/terminals');
 const userModel=require("../models/user");
 const bcrypt = require('bcrypt');
-exports.getMenu=(req, res, next)=>{
+exports.getMenu=async (req, res, next)=>{
+ // await ing.updateMany({},{optional_ids:[]})
   let id=req.headers.terminal_id
   terminalModel.findOne({_id:id},(err,terminal)=>{
     menuModel.aggregate([
       {$match:{user_id:terminal.user_id}},
       { $lookup: {
           from: "products",
-          let: { "id": "$_id" },
+          let: { "menu_id": "$_id" },
           pipeline: [
-            { $match: { $expr: { $in: [ "$$id", "$menu_ids" ] } } },
+            { $match: { $expr: { $in: [ "$$menu_id", "$menu_ids" ] } } },
             {
               $project:{
                 "menu_ids":0,
@@ -30,9 +32,9 @@ exports.getMenu=(req, res, next)=>{
                   {
                     $lookup:{
                       from: "ingredient_types",    
-                      let:{'ingr_id':'$_id'},  
+                      let:{'ingr_cat_id':'$_id'},  
                       pipeline:[
-                        { $match: { $expr: { $in: [ "$$ingr_id", "$ingredient_ids" ] } } },
+                        { $match: { $expr: { $and:[{$in: [ "$$ingr_cat_id", "$ingredient_ids" ]},{$in: [ "$$prod_id", "$default_ids" ]}] } } },
                         {
                           $project:{
                             "default_ids":0,
@@ -40,9 +42,26 @@ exports.getMenu=(req, res, next)=>{
                           }
                         },
                       ] ,
-                      as:"types"             
+                      as:"defaults"             
                     }                  
                   },
+                  {
+                    $lookup:{
+                      from: "ingredient_types",    
+                      let:{'ingr_cat_id':'$_id'},  
+                      pipeline:[
+                        { $match: { $expr: { $and:[{$in: [ "$$ingr_cat_id", "$ingredient_ids" ]},{$in: [ "$$prod_id", "$optional_ids" ]}] } } },
+                        {
+                          $project:{
+                            "default_ids":0,
+                            "ingredient_ids":0,                        
+                          }
+                        },
+                      ] ,
+                      as:"optionals"             
+                    }                  
+                  },
+                
                   {
                     $project:{
                       "product_ids":0,                      
@@ -52,27 +71,12 @@ exports.getMenu=(req, res, next)=>{
                 as:"ingredients"             
               }                
             },
-            {
-              $lookup:{
-                from: "ingredient_types",    
-                let:{'prod_id':'$_id'},  
-                pipeline:[
-                  { $match: { $expr: { $in: [ "$$prod_id", "$default_ids" ] } } },
-                  {
-                    $project:{
-                      "default_ids":0,
-                      "ingredient_ids":0,                        
-                    }
-                  },
-                ] ,
-                as:"defaults"             
-              }                  
-            },
+            
           ],
            as: "products"
         }}    
 
-  ],(err,data)=>{    
+  ],(err,data)=>{   
       res.json(data)
   })
 
