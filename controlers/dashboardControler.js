@@ -245,12 +245,9 @@ exports.addProduct=(req,res,next)=>{
                                         }
                                         else{
                                             return res.json(product)
-                                        }
-                                        
-            
+                                        }   
                                     }
                                 )
-
                             }
                             else{
                                 return res.json(product)
