@@ -1,11 +1,9 @@
 let menuModel=require('../models/menu');
 let specialModel=require('../models/special');
-let ing=require('../models/ingredientTypes')
 let terminalModel=require('../models/terminals');
 const userModel=require("../models/user");
 const bcrypt = require('bcrypt');
 exports.getMenu=async (req, res, next)=>{
- // await ing.updateMany({},{optional_ids:[]})
   let id=req.headers.terminal_id
   terminalModel.findOne({_id:id},(err,terminal)=>{
     menuModel.aggregate([
