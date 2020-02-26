@@ -101,6 +101,38 @@ exports.getIngrCategories=async (req,res,next)=>{
         })    
     res.json(ingrCategory)
 }
+exports.changeIngrCategoriesOrder=async (req,res,next)=>{
+    let decoded = getUser(req)
+   let quantity= await ingrModel.countDocuments({user_id:decoded.id})
+   console.log(quantity)
+   if(req.body.direction === "up"){
+       if(req.body.order <= 1){
+           res.status(400).json("order can not be updated")
+       }
+       else{
+            let number=Number(req.body.order)-1
+           await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
+            await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})
+          
+           res.json("updated")
+       }
+
+   }
+   else if(req.body.direction === "down"){
+        if(req.body.order>=quantity){
+            res.status(400).json("order can not be updated")   
+        }
+        else{
+            let number=Number(req.body.order)+1
+            await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
+            await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
+            res.json("updated")
+        }
+   }
+   else{
+       res.status(400).json("Please send correct order data")
+   }
+}
 
 exports.getCombos=(req,res,next)=>{
     var decoded = getUser(req) ;

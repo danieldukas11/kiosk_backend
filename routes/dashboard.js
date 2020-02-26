@@ -55,7 +55,7 @@ let videoUpload=multer({ storage:storage2})
  router.put('/admin/product/update',imgUpload.single('image'),dashboardController.updateProduct);
  router.put('/admin/combo/update',dashboardController.updateCombo);
  router.put('/admin/combo_menu/update',dashboardController.updateComboMenu);
-
+ router.put('/admin/ingr_menu/update-order',dashboardController.changeIngrCategoriesOrder); 
 
  router.delete('/admin/ingredient/delete',dashboardController.deleteIngredient);
  router.delete('/admin/ingredientmenu/delete',dashboardController.deleteIngredientMenu);
