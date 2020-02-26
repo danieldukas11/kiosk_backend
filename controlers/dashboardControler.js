@@ -92,13 +92,16 @@ exports.addUser=(req,res,next)=>{
     })
 }
 
-exports.getIngrMenu=(req,res,next)=>{   
+exports.getIngrCategories=async (req,res,next)=>{   
     let decoded = getUser(req)
-    ingrModel.find({user_id:decoded.id},(err,ingr)=>{
-        res.json(ingr)
-    }) 
-    
+    let ingrCategory = await ingrModel.find({user_id:decoded.id}).sort({order:1})
+        .catch(err=>
+            {
+            return res.json(err)
+        })    
+    res.json(ingrCategory)
 }
+
 exports.getCombos=(req,res,next)=>{
     var decoded = getUser(req) ;
      specialModel.find({user_id:decoded.id},(err,special)=>{

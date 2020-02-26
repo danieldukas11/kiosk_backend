@@ -34,7 +34,7 @@ let videoUpload=multer({ storage:storage2})
  router.put('/updateuser',dashboardController.updateUser);
  router.get('/users',dashboardController.getUsers);
 
- router.get('/admin/ingr_menu',dashboardController.getIngrMenu);
+ router.get('/admin/ingr_menu',dashboardController.getIngrCategories);
  router.get('/admin/ingredient',dashboardController.getIngredient);
  router.get('/admin/prod_menu',dashboardController.getProdMenu);
  router.get('/admin/product',dashboardController.getProducts);
