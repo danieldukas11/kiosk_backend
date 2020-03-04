@@ -104,16 +104,49 @@ exports.getIngrCategories=async (req,res,next)=>{
 exports.changeIngrCategoriesOrder=async (req,res,next)=>{
     let decoded = getUser(req)
    let quantity= await ingrModel.countDocuments({user_id:decoded.id})
-   console.log(quantity)
    if(req.body.direction === "up"){
        if(req.body.order <= 1){
            res.status(400).json("order can not be updated")
        }
        else{
+          
             let number=Number(req.body.order)-1
+            console.log(number,typeof(number));
            await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
             await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})
           
+           res.json("updated")
+       }
+
+   }
+   else if(req.body.direction === "down"){
+        if(req.body.order>=quantity){
+            res.status(400).json("order can not be updated")   
+        }
+        else{
+            let number=Number(req.body.order)+1
+            await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
+            await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
+            res.json("updated")
+        }
+   }
+   else{
+       res.status(400).json("Please send correct order data")
+   }
+}
+
+exports.changeProdCategoriesOrder=async(req,res,next)=>{
+    let decoded = getUser(req)
+   let quantity= await prodMenuModel.countDocuments({user_id:decoded.id})
+   if(req.body.direction === "up"){
+       if(req.body.order <= 1){
+           res.status(400).json("order can not be updated")
+       }
+       else{
+          
+            let number=Number(req.body.order)-1
+           await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
+            await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})          
            res.json("updated")
        }
 
@@ -148,11 +181,14 @@ exports.getIngredient=(req,res,next)=>{
     
 }
 
-exports.getProdMenu=(req,res,next)=>{   
-    let decoded = getUser(req)
-    prodMenuModel.find({user_id:decoded.id},(err,prod)=>{
-        res.json(prod)
-    }) 
+exports.getProdMenu=async(req,res,next)=>{   
+    let decoded = getUser(req);
+    let prodCategory = await prodMenuModel.find({user_id:decoded.id}).sort({order:1})
+        .catch(err=>
+            {
+            return res.json(err)
+        })    
+    res.json(prodCategory)     
     
 }
 exports.getComboMenu=(req,res,next)=>{   
@@ -171,22 +207,26 @@ exports.getProducts=(req,res,next)=>{
     
 }
 
-exports.addIngrMenu=(req,res,next)=>{   
-    let decoded = getUser(req)
+exports.addIngrMenu=async(req,res,next)=>{   
+    let decoded = getUser(req);
+    let quantity= await ingrModel.countDocuments({user_id:decoded.id})
     let dat={
         title:req.body.title,
-        user_id:decoded.id,        
+        user_id:decoded.id,
+        order:+quantity+1
     }
     ingrModel.create(dat,(err,ingrMenu)=>{
         res.json(ingrMenu);
     })  
     
 }
-exports.addProdMenu=(req,res,next)=>{   
+exports.addProdMenu=async(req,res,next)=>{   
     let decoded = getUser(req)
+    let quantity= await prodMenuModel.countDocuments({user_id:decoded.id})
     let dat={
         title:req.body.title,
-        user_id:decoded.id,        
+        user_id:decoded.id, 
+        order:+quantity+1       
     }
     prodMenuModel.create(dat,(err,prodMenu)=>{
         res.json(prodMenu);
@@ -272,10 +312,8 @@ exports.addProduct=(req,res,next)=>{
                                                     if(err){
                                                         return res.json(err)
                                                     }
-                                                    return res.json(product)                                                    
-                        
-                                                }
-                                            )
+                                                    return res.json(product)                        
+                                                })
             
                                         }
                                         else{
@@ -376,8 +414,6 @@ exports.addCombo=(req,res,next)=>{
     })   
     
 }
-
-
 exports.addComboMenu=(req,res,next)=>{ 
     let decoded = getUser(req)  
     let dat=req.body  

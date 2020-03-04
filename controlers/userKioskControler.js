@@ -22,11 +22,56 @@ exports.getMenu=async (req, res, next)=>{
               }
             },
             {
+
               $lookup:{
                 from: "ingredients",    
                 let:{'prod_id':'$_id'},  
                 pipeline:[
-                  { $match: { $expr: { $in: [ "$$prod_id", "$product_ids" ] } } },
+                  { $match: {$and:[{ $expr: { $in: [ "$$prod_id", "$product_ids" ] } },{isIngredient:false}]} },
+                  {$sort:{order:1}},
+                  {
+                    $lookup:{
+                      from: "ingredient_types",    
+                      let:{'ingr_cat_id':'$_id'},  
+                      pipeline:[
+                        { $match: { $expr: { $and:[{$in: [ "$$ingr_cat_id", "$ingredient_ids" ]},{$in: [ "$$prod_id", "$default_ids" ]}] } } },
+                        {
+                          $project:{
+                            "default_ids":0,
+                            "ingredient_ids":0,                        
+                          }
+                        },
+                      ] ,
+                      as:"defaults"             
+                    }                  
+                  },
+                  {
+                    $lookup:{
+                      from: "ingredient_types",    
+                      let:{'ingr_cat_id':'$_id'},  
+                      pipeline:[
+                        { $match: { $expr: { $and:[{$in: [ "$$ingr_cat_id", "$ingredient_ids" ]},{$in: [ "$$prod_id", "$optional_ids" ]}] } } },
+                        {
+                          $project:{
+                            "default_ids":0,
+                            "ingredient_ids":0,                        
+                          }
+                        },
+                      ] ,
+                      as:"optionals"             
+                    }                  
+                  },
+                ],
+                as: "specifications",
+              } 
+            },
+            {
+              $lookup:{
+                from: "ingredients",    
+                let:{'prod_id':'$_id'},  
+                pipeline:[
+                  { $match: {$and:[{ $expr: { $in: [ "$$prod_id", "$product_ids" ] } },{isIngredient:true}]} },
+                  {$sort:{order:1}},
                   {
                     $lookup:{
                       from: "ingredient_types",    
