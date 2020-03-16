@@ -8,7 +8,7 @@ global.io = require('socket.io')(server);
 let orderModel=require('./models/orders')
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
-
+let socket=require("./sockets/socket")
 
 // var corsOptions = {
 //     origin: 'localhost:4200',
@@ -60,28 +60,5 @@ server.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`); 
 });
 
-io.on("connection",(socket)=>{
-    socket.on("closeEvent",(data)=>{
-        orderModel.updateMany( 
-            {action:{ $ne: "closed" }},
-            {$set:{action:"closed"}},
-            (err,data)=>{
-                console.log(data)
-            }
-        
-        )
-    })
-    socket.on("getOrders",()=>{
-        orderModel.find({action:{$ne:"closed"}},(err,data)=>{
-            io.emit('initorder',data)
-        })
-    })
-    socket.on("pay",(data)=>{   
-        orderModel.create(data,(err,res)=>{
-            console.log(res)
-        io.emit("order",res)           
-        })
-        
-    })
-})
+
 

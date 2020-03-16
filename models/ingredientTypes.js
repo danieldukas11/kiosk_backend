@@ -7,6 +7,7 @@ let ingrSchema=new Schema({
     ingredient_ids:[ObjectId],
     default_ids:[ObjectId],
     optional_ids:[ObjectId],
+    hidden:Boolean,
     user_id:ObjectId
 })
 module.exports = mongoose.model('ingredient_type', ingrSchema);

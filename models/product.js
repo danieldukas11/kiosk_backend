@@ -10,6 +10,7 @@ let productSchema=new Schema({
     menu_ids:[ObjectId],
     sizes:Array,
     size:Object,
+    hidden:Boolean,
     user_id:ObjectId,
     orders:{
         type:Number,

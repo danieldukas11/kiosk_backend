@@ -6,6 +6,7 @@ const productModel=require("../models/product");
 const specialModel=require("../models/special");
 const comboMenuModel=require("../models/combomenu");
 const progressModel=require("../models/progressMonitor");
+const kioskModel=require("../models/kiosk");
 const fs=require("fs");
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -120,6 +121,7 @@ exports.changeIngrCategoriesOrder=async (req,res,next)=>{
 
    }
    else if(req.body.direction === "down"){
+      
         if(req.body.order>=quantity){
             res.status(400).json("order can not be updated")   
         }
@@ -152,13 +154,14 @@ exports.changeProdCategoriesOrder=async(req,res,next)=>{
 
    }
    else if(req.body.direction === "down"){
+    console.log(req.body,quantity)
         if(req.body.order>=quantity){
             res.status(400).json("order can not be updated")   
         }
         else{
             let number=Number(req.body.order)+1
-            await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
-            await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
+            await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
+            await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
             res.json("updated")
         }
    }
@@ -860,4 +863,55 @@ exports.updateUser = (req,res,next)=>{
         res.json(data)
     })  
 }
+//////////////////////////////////////////////show hide update////////////////////////////////////////////
+exports.updateIngrMenuVisiblity= async(req,res,next) =>{
+    let result=await ingrModel.updateOne({_id:req.body._id},{hidden: req.body.hidden})
+    res.json(result)
+}
+exports.updateIngrVisiblity= async(req,res,next) =>{
+    let decoded = getUser(req)
+    let result=await ingrTypeModel.updateOne({_id:req.body._id},{hidden: req.body.hidden})
+    res.json(result)
+}
+exports.updateProdMenuVisiblity= async(req,res,next) =>{    
+    let decoded = getUser(req)
+    let result=await prodMenuModel.updateOne({_id:req.body._id},{hidden: req.body.hidden})
+    res.json(result)
+}
+exports.updateProdVisiblity= async(req,res,next) =>{    
+    let decoded = getUser(req)
+    let result=await productModel.updateOne({_id:req.body._id},{hidden: req.body.hidden})
+    res.json(result)
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+////////////kiosk management//////////////////////
+exports.addKioskVideo=(req,res,next)=>{
+    let decoded = getUser(req) 
+    let formdata={
+        user_id:decoded.id,
+        kioskVideo:req.file.filename,
+    }
+    kioskModel.findOne({user_id:decoded.id},(err,data)=>{        
+        if(data){
+            kioskModel.findOneAndUpdate({user_id:decoded.id},{adVideo:req.file.filename},(err,data)=>{
+                if (err){
+                    res.status(400).json(err)
+                    return
+                }
+                res.json(data)
+            })
+
+        }
+        else{
+            kioskModel.create(formdata,(err,data)=>{
+                if (err){
+                    res.status(400).json(err)
+                    return
+                }
+                res.json(data)
+            })
+        }        
+    })
+}

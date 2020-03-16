@@ -57,6 +57,19 @@ let videoUpload=multer({ storage:storage2})
  router.put('/admin/combo_menu/update',dashboardController.updateComboMenu);
  router.put('/admin/ingr_menu/update-order',dashboardController.changeIngrCategoriesOrder); 
  router.put('/admin/prod_menu/update-order',dashboardController.changeProdCategoriesOrder); 
+ 
+
+ router.put('/admin/prod_menu/update-visibility',dashboardController.updateProdMenuVisiblity); 
+ router.put('/admin/product/update-visibility',dashboardController.updateProdVisiblity); 
+ //router.put('/admin/prod_menu/update-visibility',dashboardController.updateProdMenuVisiblity); 
+ //router.put('/admin/prod_menu/update-visibility',dashboardController.updateProdMenuVisiblity); 
+
+
+
+ 
+
+
+
  router.delete('/admin/ingredient/delete',dashboardController.deleteIngredient);
  router.delete('/admin/ingredientmenu/delete',dashboardController.deleteIngredientMenu);
  router.delete('/admin/prod_menu/delete',dashboardController.deleteProdMenu);
@@ -66,5 +79,6 @@ let videoUpload=multer({ storage:storage2})
  router.delete('/admin/combo_prod/delete',dashboardController.deleteComboProd);
 
  router.post("/admin/ads/video/add",videoUpload.single("adVideo"),dashboardController.addAdVideo)
+ router.post("/admin/kiosk/video/add",videoUpload.single("kioskVideo"),dashboardController.addKioskVideo)
  router.get('/admin/progress_monitor',dashboardController.getprogressMonitorData);
   module.exports = router;
