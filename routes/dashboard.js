@@ -61,8 +61,8 @@ let videoUpload=multer({ storage:storage2})
 
  router.put('/admin/prod_menu/update-visibility',dashboardController.updateProdMenuVisiblity); 
  router.put('/admin/product/update-visibility',dashboardController.updateProdVisiblity); 
- //router.put('/admin/prod_menu/update-visibility',dashboardController.updateProdMenuVisiblity); 
- //router.put('/admin/prod_menu/update-visibility',dashboardController.updateProdMenuVisiblity); 
+ router.put('/admin/ingr_menu/update-visibility',dashboardController.updateIngrMenuVisiblity); 
+ router.put('/admin/ingredient/update-visibility',dashboardController.updateIngrVisiblity); 
 
 
 
