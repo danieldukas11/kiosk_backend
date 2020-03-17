@@ -3,8 +3,8 @@ const ingrModel=require("../models/ingredient");
 const ingrTypeModel=require("../models/ingredientTypes");
 const prodMenuModel=require("../models/menu");
 const productModel=require("../models/product");
-const specialModel=require("../models/special");
-const comboMenuModel=require("../models/combomenu");
+//const specialModel=require("../models/special");
+//const comboMenuModel=require("../models/combomenu");
 const progressModel=require("../models/progressMonitor");
 const kioskModel=require("../models/kiosk");
 const fs=require("fs");
@@ -16,10 +16,10 @@ const saltRounds = 10;
 
 
 function getUser(req){
-    let authToken=req.headers['authorization']
-    
+    let authToken=req.headers['authorization']        
    return jwt.verify(authToken, JWTKey).data; 
 }
+
 exports.login=(req, res, next)=>{
     userModel.findOne({$or:[{userName:req.body.userName},{email:req.body.userName}]},(err,user)=>{
         if(err){
@@ -64,12 +64,9 @@ exports.getUsers=(req,res,next)=>{
         }
         else{
             res.json([])
-        }
-        
-    })
-  
+        }        
+    })  
 }
-
 
 exports.addUser=(req,res,next)=>{    
     var decoded = getUser(req)
@@ -83,13 +80,11 @@ exports.addUser=(req,res,next)=>{
                         res.json(user);
                     })
                 });
-            });
-            
+            });            
         }
         else{
             res.json([])
-        }
-        
+        }        
     })
 }
 
@@ -170,12 +165,6 @@ exports.changeProdCategoriesOrder=async(req,res,next)=>{
    }
 }
 
-exports.getCombos=(req,res,next)=>{
-    var decoded = getUser(req) ;
-     specialModel.find({user_id:decoded.id},(err,special)=>{
-        res.json(special)
-    })  
-}
 exports.getIngredient=(req,res,next)=>{   
     let decoded = getUser(req)
     ingrTypeModel.find({user_id:decoded.id},(err,ingr)=>{
@@ -194,13 +183,7 @@ exports.getProdMenu=async(req,res,next)=>{
     res.json(prodCategory)     
     
 }
-exports.getComboMenu=(req,res,next)=>{   
-    let decoded = getUser(req)
-    comboMenuModel.find({user_id:decoded.id},(err,prod)=>{
-        res.json(prod)
-    }) 
-    
-}
+
 
 exports.getProducts=(req,res,next)=>{   
     let decoded = getUser(req)
@@ -347,100 +330,7 @@ exports.addProduct=(req,res,next)=>{
 
 }
 
-exports.addCombo=(req,res,next)=>{ 
-    let decoded = getUser(req) 
-    let dat={
-        title:req.body.title,
-        image:req.file.filename,
-        user_id:decoded._id,
-        price:req.body.price,
-        user_id:decoded.id
-    }   
-    let combo_menu=JSON.parse(req.body.comboMenu ),
-    combo_menu_id=[],
-    defaults=JSON.parse(req.body.defaults ),
-    defaults_ids=[]
-    products=JSON.parse(req.body.products ),
-    products_ids=[];
-    if (combo_menu&&combo_menu.length){
-        combo_menu.forEach(m=>{
-            combo_menu_id.push(m._id)
-        })
-    }
-    if (defaults&&defaults.length){
-        defaults.forEach(m=>{
-            defaults_ids.push(m._id)
-        })
-    }
-    if (products&&products.length){
-        products.forEach(m=>{
-            products_ids.push(m._id)
-        })
-    }       
-  
 
-    specialModel.create(dat,(err,combo)=>{
-        if(combo_menu_id&&combo_menu_id.length){     
-            comboMenuModel.updateMany(
-             { _id: { $in: combo_menu_id } },
-             {$push:{specials_id:combo._id}},
-             (err,data)=>{
-                if(products_ids&&products_ids.length){  
-                    productModel.updateMany(
-                        { _id: { $in: products_ids } },
-                        {$push:{special_ids:combo._id}},
-                        (err,data)=>{
-                            if(defaults_ids&&defaults_ids.length){
-                                productModel.updateMany(
-                                    { _id: { $in: products_ids } },
-                                    {$push:{selected_ids:combo._id}},
-                                    (err,data)=>{
-                                        res.json(combo)
-
-                                    })
-                            }
-                            else{
-                                res.json(combo)
-                            }
-                        }
-                    )
-                }
-                else{
-                    res.json(combo)
-                }
-                
-            })  
-        } 
-        else{
-            res.json(combo)
-        }
-    })   
-    
-}
-exports.addComboMenu=(req,res,next)=>{ 
-    let decoded = getUser(req)  
-    let dat=req.body  
-    dat.user_id= decoded.id
-    comboMenuModel.create(dat,(err,comboMenu)=>{
-        res.json(comboMenu)
-    })
-    
-}
-    
-exports.addComboProd=   (req,res,next)=>{ 
-    if(req.body.products&&req.body.products.length){     
-       productModel.updateMany(
-        { _id: { $in: req.body.products } },
-        {$push:{special_menu_ids:req.body.special_menu_id}},
-        (err,data)=>{
-            res.json(data)
-        })
-     
-       
-    }
-    
-    
-}
 
 exports.deleteIngredient=(req,res,next)=>{ 
     ingrTypeModel.findOne({_id:req.query.id},(err,data)=>{
@@ -559,63 +449,8 @@ exports.deleteProduct=(req,res,next)=>{
                 })
         })  
 }
-exports.deleteComboProd=(req,res,next)=>{
-    productModel.updateMany(
-        { _id:req.query.id },
-       {$set:{special_menu_ids:[],special_ids:[],selected_ids:[]}},
-        (err,data)=>{
-            res.json(data)
-    })
-  
-}
 
-exports.deleteComboMenu=(req,res,next)=>{
-    comboMenuModel.findOneAndDelete({_id:req.query.id},(err,data)=>{     
-        if(err){
-            res.status(400).json(err)
-            return
-        }                  
-        productModel.updateMany(
-            { special_menu_ids: { $in: req.query.id } },
-           {$set:{special_menu_ids:[],special_ids:[],selected_ids:[]}},
-            (err,data)=>{
-                if(err){
-                    res.status(400).json(err)
-                    return
-                }  
-                res.json(data)
-        })
-        
-    })
-}
-exports.deleteCombo=(req,res,next)=>{
-    specialModel.findOneAndDelete({_id:req.query.id},(err,data)=>{     
-        if(err){
-            res.status(400).json(err)
-            return
-        }                  
-        if (data&&data.image){                           
-            if (fs.existsSync(`./public/images/${data.image}`)) {
-                fs.unlinkSync(`./public/images/${data.image}`);}
-        }
-        comboMenuModel.updateMany( { specials_id: { $in: req.query.id } },
-            {$pullAll:{specials_id:[req.query.id]}},(err,data)=>{
-                productModel.updateMany({ special_ids: { $in: req.query.id }} ,{$pullAll:{special_ids: [req.query.id]}},(err,data)=>{
-                    if(err){
-                        res.status(400).json(err)
-                        return
-                    }  
-                    productModel.updateMany({ selected_ids: { $in: req.query.id }} ,{$pullAll:{selected_ids: [req.query.id]}},(err,data)=>{
-                        if(err){
-                            res.status(400).json(err)
-                            return
-                        }  
-                        res.json(data)
-                    })
-                })
-            })
-    })
-}
+
 
 
 exports.addAdVideo=(req,res,next)=>{
@@ -721,14 +556,13 @@ exports.updateIngredient=(req,res,next)=>{
     }) 
    
 }
-exports.updateProdMenu=(req,res,next)=>{
-    prodMenuModel.updateOne({_id:req.body._id},{title:req.body.title},(err,data)=>{
-        if (err){
-            res.status(400).json(err)
-            return
-        }
-        res.json(data)
-    })  
+exports.updateProdMenu=async (req,res,next)=>{
+    const result= await prodMenuModel.updateOne({_id:req.body._id},{title:req.body.title})
+    .catch(err=>
+            {
+            return res.json(err)
+    }) 
+    res.json(result)
 }
 exports.updateProduct=async(req,res,next)=>{
    
@@ -829,24 +663,7 @@ exports.updateProduct=async(req,res,next)=>{
     res.json("updated")
 
 }
-exports.updateCombo=(req,res,next)=>{
-    specialModel.updateOne({_id:req.body._id},{title:req.body.title},(err,data)=>{
-        if (err){
-            res.status(400).json(err)
-            return
-        }
-        res.json(data)
-    })  
-}
-exports.updateComboMenu=(req,res,next)=>{
-    comboMenuModel.updateOne({_id:req.body._id},{title:req.body.title,configurable:req.body.configurable},(err,data)=>{
-        if (err){
-            res.status(400).json(err)
-            return
-        }
-        res.json(data)
-    })  
-}
+
 
 
 exports.updateUser = (req,res,next)=>{
@@ -886,7 +703,7 @@ exports.updateProdVisiblity= async(req,res,next) =>{
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-////////////kiosk management//////////////////////
+////////////////////////////////////////kiosk management///////////////////////////////////////////////////
 exports.addKioskVideo=(req,res,next)=>{
     let decoded = getUser(req) 
     let formdata={
@@ -915,3 +732,189 @@ exports.addKioskVideo=(req,res,next)=>{
         }        
     })
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// exports.updateCombo=(req,res,next)=>{
+//     specialModel.updateOne({_id:req.body._id},{title:req.body.title},(err,data)=>{
+//         if (err){
+//             res.status(400).json(err)
+//             return
+//         }
+//         res.json(data)
+//     })  
+// }
+// exports.updateComboMenu=(req,res,next)=>{
+//     comboMenuModel.updateOne({_id:req.body._id},{title:req.body.title,configurable:req.body.configurable},(err,data)=>{
+//         if (err){
+//             res.status(400).json(err)
+//             return
+//         }
+//         res.json(data)
+//     })  
+// }
+// exports.deleteCombo=(req,res,next)=>{
+//     specialModel.findOneAndDelete({_id:req.query.id},(err,data)=>{     
+//         if(err){
+//             res.status(400).json(err)
+//             return
+//         }                  
+//         if (data&&data.image){                           
+//             if (fs.existsSync(`./public/images/${data.image}`)) {
+//                 fs.unlinkSync(`./public/images/${data.image}`);}
+//         }
+//         comboMenuModel.updateMany( { specials_id: { $in: req.query.id } },
+//             {$pullAll:{specials_id:[req.query.id]}},(err,data)=>{
+//                 productModel.updateMany({ special_ids: { $in: req.query.id }} ,{$pullAll:{special_ids: [req.query.id]}},(err,data)=>{
+//                     if(err){
+//                         res.status(400).json(err)
+//                         return
+//                     }  
+//                     productModel.updateMany({ selected_ids: { $in: req.query.id }} ,{$pullAll:{selected_ids: [req.query.id]}},(err,data)=>{
+//                         if(err){
+//                             res.status(400).json(err)
+//                             return
+//                         }  
+//                         res.json(data)
+//                     })
+//                 })
+//             })
+//     })
+// }
+// exports.getComboMenu=(req,res,next)=>{   
+//     let decoded = getUser(req)
+//     comboMenuModel.find({user_id:decoded.id},(err,prod)=>{
+//         res.json(prod)
+//     }) 
+    
+// }
+// exports.getCombos=(req,res,next)=>{
+//     var decoded = getUser(req) ;
+//      specialModel.find({user_id:decoded.id},(err,special)=>{
+//         res.json(special)
+//     })  
+// }
+// exports.addCombo=(req,res,next)=>{ 
+//     let decoded = getUser(req) 
+//     let dat={
+//         title:req.body.title,
+//         image:req.file.filename,
+//         user_id:decoded._id,
+//         price:req.body.price,
+//         user_id:decoded.id
+//     }   
+//     let combo_menu=JSON.parse(req.body.comboMenu ),
+//     combo_menu_id=[],
+//     defaults=JSON.parse(req.body.defaults ),
+//     defaults_ids=[]
+//     products=JSON.parse(req.body.products ),
+//     products_ids=[];
+//     if (combo_menu&&combo_menu.length){
+//         combo_menu.forEach(m=>{
+//             combo_menu_id.push(m._id)
+//         })
+//     }
+//     if (defaults&&defaults.length){
+//         defaults.forEach(m=>{
+//             defaults_ids.push(m._id)
+//         })
+//     }
+//     if (products&&products.length){
+//         products.forEach(m=>{
+//             products_ids.push(m._id)
+//         })
+//     }       
+  
+
+//     specialModel.create(dat,(err,combo)=>{
+//         if(combo_menu_id&&combo_menu_id.length){     
+//             comboMenuModel.updateMany(
+//              { _id: { $in: combo_menu_id } },
+//              {$push:{specials_id:combo._id}},
+//              (err,data)=>{
+//                 if(products_ids&&products_ids.length){  
+//                     productModel.updateMany(
+//                         { _id: { $in: products_ids } },
+//                         {$push:{special_ids:combo._id}},
+//                         (err,data)=>{
+//                             if(defaults_ids&&defaults_ids.length){
+//                                 productModel.updateMany(
+//                                     { _id: { $in: products_ids } },
+//                                     {$push:{selected_ids:combo._id}},
+//                                     (err,data)=>{
+//                                         res.json(combo)
+
+//                                     })
+//                             }
+//                             else{
+//                                 res.json(combo)
+//                             }
+//                         }
+//                     )
+//                 }
+//                 else{
+//                     res.json(combo)
+//                 }
+                
+//             })  
+//         } 
+//         else{
+//             res.json(combo)
+//         }
+//     })   
+    
+// }
+// exports.addComboMenu=(req,res,next)=>{ 
+//     let decoded = getUser(req)  
+//     let dat=req.body  
+//     dat.user_id= decoded.id
+//     comboMenuModel.create(dat,(err,comboMenu)=>{
+//         res.json(comboMenu)
+//     })
+    
+// }
+    
+// exports.addComboProd=   (req,res,next)=>{ 
+//     if(req.body.products&&req.body.products.length){     
+//        productModel.updateMany(
+//         { _id: { $in: req.body.products } },
+//         {$push:{special_menu_ids:req.body.special_menu_id}},
+//         (err,data)=>{
+//             res.json(data)
+//         })
+     
+       
+//     }
+    
+    
+// }
+
+// exports.deleteComboProd=(req,res,next)=>{
+//     productModel.updateMany(
+//         { _id:req.query.id },
+//        {$set:{special_menu_ids:[],special_ids:[],selected_ids:[]}},
+//         (err,data)=>{
+//             res.json(data)
+//     })
+  
+// }
+
+// exports.deleteComboMenu=(req,res,next)=>{
+//     comboMenuModel.findOneAndDelete({_id:req.query.id},(err,data)=>{     
+//         if(err){
+//             res.status(400).json(err)
+//             return
+//         }                  
+//         productModel.updateMany(
+//             { special_menu_ids: { $in: req.query.id } },
+//            {$set:{special_menu_ids:[],special_ids:[],selected_ids:[]}},
+//             (err,data)=>{
+//                 if(err){
+//                     res.status(400).json(err)
+//                     return
+//                 }  
+//                 res.json(data)
+//         })
+        
+//     })
+// }

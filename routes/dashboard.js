@@ -33,52 +33,58 @@ let videoUpload=multer({ storage:storage2})
  router.post('/adduser',dashboardController.addUser);
  router.put('/updateuser',dashboardController.updateUser);
  router.get('/users',dashboardController.getUsers);
+//////////////////////////////////////////////get dashboard///////////////////////////////////////////////////////////
+router.get('/admin/ingr_menu',dashboardController.getIngrCategories);
+router.get('/admin/ingredient',dashboardController.getIngredient);
+router.get('/admin/prod_menu',dashboardController.getProdMenu);
+router.get('/admin/product',dashboardController.getProducts);
+//router.get('/admin/combo',dashboardController.getCombos);
+//router.get('/admin/combo_menu',dashboardController.getComboMenu);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- router.get('/admin/ingr_menu',dashboardController.getIngrCategories);
- router.get('/admin/ingredient',dashboardController.getIngredient);
- router.get('/admin/prod_menu',dashboardController.getProdMenu);
- router.get('/admin/product',dashboardController.getProducts);
- router.get('/admin/combo',dashboardController.getCombos);
- router.get('/admin/combo_menu',dashboardController.getComboMenu);
+/////////////////////////////////////////////add dashboard////////////////////////////////////////////////////////////
+router.post('/admin/ingr_menu/add',dashboardController.addIngrMenu); 
+router.post('/admin/ingredient/add',imgUpload.single('image'),dashboardController.addIngredient);
+router.post('/admin/prod_menu/add',dashboardController.addProdMenu);
+router.post('/admin/product/add',imgUpload.single('image'),dashboardController.addProduct);
+//router.post('/admin/combo/add',imgUpload.single('image'),dashboardController.addCombo);
+//router.post('/admin/combo_menu/add',dashboardController.addComboMenu);
+//router.post('/admin/combo_prod/add',dashboardController.addComboProd);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- router.post('/admin/ingr_menu/add',dashboardController.addIngrMenu); 
- router.post('/admin/ingredient/add',imgUpload.single('image'),dashboardController.addIngredient);
- router.post('/admin/prod_menu/add',dashboardController.addProdMenu);
- router.post('/admin/product/add',imgUpload.single('image'),dashboardController.addProduct);
- router.post('/admin/combo/add',imgUpload.single('image'),dashboardController.addCombo);
- router.post('/admin/combo_menu/add',dashboardController.addComboMenu);
- router.post('/admin/combo_prod/add',dashboardController.addComboProd);
+//////////////////////////////////////////////update dashboard///////////////////////////////////////////////////////
+router.put('/admin/ingr_menu/update',dashboardController.updateIngrMenu); 
+router.put('/admin/ingredient/update',imgUpload.single('image'),dashboardController.updateIngredient);
+router.put('/admin/prod_menu/update',dashboardController.updateProdMenu);
+router.put('/admin/product/update',imgUpload.single('image'),dashboardController.updateProduct);
+//router.put('/admin/combo/update',dashboardController.updateCombo);
+//router.put('/admin/combo_menu/update',dashboardController.updateComboMenu);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- router.put('/admin/ingr_menu/update',dashboardController.updateIngrMenu); 
- router.put('/admin/ingredient/update',imgUpload.single('image'),dashboardController.updateIngredient);
- router.put('/admin/prod_menu/update',dashboardController.updateProdMenu);
- router.put('/admin/product/update',imgUpload.single('image'),dashboardController.updateProduct);
- router.put('/admin/combo/update',dashboardController.updateCombo);
- router.put('/admin/combo_menu/update',dashboardController.updateComboMenu);
- router.put('/admin/ingr_menu/update-order',dashboardController.changeIngrCategoriesOrder); 
- router.put('/admin/prod_menu/update-order',dashboardController.changeProdCategoriesOrder); 
+/////////////////////////////////////////////order update/////////////////////////////////////////////////
+router.put('/admin/ingr_menu/update-order',dashboardController.changeIngrCategoriesOrder); 
+router.put('/admin/prod_menu/update-order',dashboardController.changeProdCategoriesOrder); 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
  
-
- router.put('/admin/prod_menu/update-visibility',dashboardController.updateProdMenuVisiblity); 
- router.put('/admin/product/update-visibility',dashboardController.updateProdVisiblity); 
- router.put('/admin/ingr_menu/update-visibility',dashboardController.updateIngrMenuVisiblity); 
- router.put('/admin/ingredient/update-visibility',dashboardController.updateIngrVisiblity); 
-
-
-
- 
+//////////////////////////////////////////////show hide update////////////////////////////////////////////
+router.put('/admin/prod_menu/update-visibility',dashboardController.updateProdMenuVisiblity); 
+router.put('/admin/product/update-visibility',dashboardController.updateProdVisiblity); 
+router.put('/admin/ingr_menu/update-visibility',dashboardController.updateIngrMenuVisiblity); 
+router.put('/admin/ingredient/update-visibility',dashboardController.updateIngrVisiblity); 
+///////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 
+///////////////////////////////////////////////delete dashboard////////////////////////////////////////////////////
+router.delete('/admin/ingredient/delete',dashboardController.deleteIngredient);
+router.delete('/admin/ingredientmenu/delete',dashboardController.deleteIngredientMenu);
+router.delete('/admin/prod_menu/delete',dashboardController.deleteProdMenu);
+router.delete('/admin/product/delete',dashboardController.deleteProduct);
+//router.delete('/admin/combo/delete',dashboardController.deleteCombo);
+//router.delete('/admin/combo_menu/delete',dashboardController.deleteComboMenu);
+//router.delete('/admin/combo_prod/delete',dashboardController.deleteComboProd);
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- router.delete('/admin/ingredient/delete',dashboardController.deleteIngredient);
- router.delete('/admin/ingredientmenu/delete',dashboardController.deleteIngredientMenu);
- router.delete('/admin/prod_menu/delete',dashboardController.deleteProdMenu);
- router.delete('/admin/product/delete',dashboardController.deleteProduct);
- router.delete('/admin/combo/delete',dashboardController.deleteCombo);
- router.delete('/admin/combo_menu/delete',dashboardController.deleteComboMenu);
- router.delete('/admin/combo_prod/delete',dashboardController.deleteComboProd);
-
- router.post("/admin/ads/video/add",videoUpload.single("adVideo"),dashboardController.addAdVideo)
- router.post("/admin/kiosk/video/add",videoUpload.single("kioskVideo"),dashboardController.addKioskVideo)
- router.get('/admin/progress_monitor',dashboardController.getprogressMonitorData);
-  module.exports = router;
+router.post("/admin/ads/video/add",videoUpload.single("adVideo"),dashboardController.addAdVideo)
+router.post("/admin/kiosk/video/add",videoUpload.single("kioskVideo"),dashboardController.addKioskVideo)
+router.get('/admin/progress_monitor',dashboardController.getprogressMonitorData);
+module.exports = router;

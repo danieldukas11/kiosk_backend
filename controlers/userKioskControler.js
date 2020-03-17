@@ -27,7 +27,7 @@ exports.getMenu=async (req, res, next)=>{
                 from: "ingredients",    
                 let:{'prod_id':'$_id'},  
                 pipeline:[
-                  { $match: {$and:[{ $expr: { $in: [ "$$prod_id", "$product_ids" ] } },{isIngredient:false}]} },
+                  { $match: {$and:[{ $expr: { $in: [ "$$prod_id", "$product_ids" ] } },{isIngredient:false},{hidden:false}]} },
                   {$sort:{order:1}},
                   {
                     $lookup:{
@@ -70,7 +70,7 @@ exports.getMenu=async (req, res, next)=>{
                 from: "ingredients",    
                 let:{'prod_id':'$_id'},  
                 pipeline:[
-                  { $match: {$and:[{ $expr: { $in: [ "$$prod_id", "$product_ids" ] } },{isIngredient:true}]} },
+                  { $match: {$and:[{ $expr: { $in: [ "$$prod_id", "$product_ids" ] } },{isIngredient:true},{hidden:false}]} },
                   {$sort:{order:1}},
                   {
                     $lookup:{
