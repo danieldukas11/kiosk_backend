@@ -12,6 +12,7 @@ let productSchema=new Schema({
     size:Object,
     hidden:Boolean,
     user_id:ObjectId,
+    order:Number,
     orders:{
         type:Number,
         default:0

@@ -63,7 +63,9 @@ router.put('/admin/product/update',imgUpload.single('image'),dashboardController
 
 /////////////////////////////////////////////order update/////////////////////////////////////////////////
 router.put('/admin/ingr_menu/update-order',dashboardController.changeIngrCategoriesOrder); 
+router.put('/admin/ingredient/update-order',dashboardController.changeIngrOrder);
 router.put('/admin/prod_menu/update-order',dashboardController.changeProdCategoriesOrder); 
+router.put('/admin/product/update-order',dashboardController.changeProdOrder);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
  
 //////////////////////////////////////////////show hide update////////////////////////////////////////////

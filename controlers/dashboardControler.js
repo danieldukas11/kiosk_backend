@@ -97,79 +97,16 @@ exports.getIngrCategories=async (req,res,next)=>{
         })    
     res.json(ingrCategory)
 }
-exports.changeIngrCategoriesOrder=async (req,res,next)=>{
-    let decoded = getUser(req)
-   let quantity= await ingrModel.countDocuments({user_id:decoded.id})
-   if(req.body.direction === "up"){
-       if(req.body.order <= 1){
-           res.status(400).json("order can not be updated")
-       }
-       else{
-          
-            let number=Number(req.body.order)-1
-            console.log(number,typeof(number));
-           await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
-            await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})
-          
-           res.json("updated")
-       }
 
-   }
-   else if(req.body.direction === "down"){
-      
-        if(req.body.order>=quantity){
-            res.status(400).json("order can not be updated")   
-        }
-        else{
-            let number=Number(req.body.order)+1
-            await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
-            await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
-            res.json("updated")
-        }
-   }
-   else{
-       res.status(400).json("Please send correct order data")
-   }
-}
 
-exports.changeProdCategoriesOrder=async(req,res,next)=>{
-    let decoded = getUser(req)
-   let quantity= await prodMenuModel.countDocuments({user_id:decoded.id})
-   if(req.body.direction === "up"){
-       if(req.body.order <= 1){
-           res.status(400).json("order can not be updated")
-       }
-       else{
-          
-            let number=Number(req.body.order)-1
-           await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
-            await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})          
-           res.json("updated")
-       }
-
-   }
-   else if(req.body.direction === "down"){
-    console.log(req.body,quantity)
-        if(req.body.order>=quantity){
-            res.status(400).json("order can not be updated")   
-        }
-        else{
-            let number=Number(req.body.order)+1
-            await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
-            await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
-            res.json("updated")
-        }
-   }
-   else{
-       res.status(400).json("Please send correct order data")
-   }
-}
-
-exports.getIngredient=(req,res,next)=>{   
-    let decoded = getUser(req)
-    ingrTypeModel.find({user_id:decoded.id},(err,ingr)=>{
-        res.json(ingr)
-    }) 
+exports.getIngredient=async(req,res,next)=>{   
+    let decoded = getUser(req);
+    let ingr = await ingrTypeModel.find({user_id:decoded.id}).sort({order:1})
+        .catch(err=>
+            {
+            return res.json(err)
+        })    
+    res.json(ingr) 
     
 }
 
@@ -185,11 +122,14 @@ exports.getProdMenu=async(req,res,next)=>{
 }
 
 
-exports.getProducts=(req,res,next)=>{   
+exports.getProducts=async(req,res,next)=>{   
     let decoded = getUser(req)
-    productModel.find({user_id:decoded.id},(err,prod)=>{
-        res.json(prod)
-    }) 
+    const prod= await productModel.find({user_id:decoded.id}) .sort({order:1})
+    .catch(err=>
+        {
+        return res.json(err)
+    })    
+    res.json(prod)    
     
 }
 
@@ -680,6 +620,148 @@ exports.updateUser = (req,res,next)=>{
         res.json(data)
     })  
 }
+
+//////////////////////////////////////////////update order//////////////////////////////////////////////////////////////////////////////////////////
+exports.changeIngrCategoriesOrder=async (req,res,next)=>{
+    let decoded = getUser(req)
+   let quantity= await ingrModel.countDocuments({user_id:decoded.id})
+   if(req.body.direction === "up"){
+       if(req.body.order <= 1){
+           res.status(400).json("order can not be updated")
+       }
+       else{
+          
+            let number=Number(req.body.order)-1
+            console.log(number,typeof(number));
+           await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
+            await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})
+          
+           res.json("updated")
+       }
+
+   }
+   else if(req.body.direction === "down"){
+      
+        if(req.body.order>=quantity){
+            res.status(400).json("order can not be updated")   
+        }
+        else{
+            let number=Number(req.body.order)+1
+            await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
+            await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
+            res.json("updated")
+        }
+   }
+   else{
+       res.status(400).json("Please send correct order data")
+   }
+}
+exports.changeIngrOrder=async (req,res,next)=>{
+    let decoded = getUser(req)
+   let quantity= await ingrTypeModel.countDocuments({user_id:decoded.id})
+   if(req.body.direction === "up"){
+       if(req.body.order <= 1){
+           res.status(400).json("order can not be updated")
+       }
+       else{          
+            let number=Number(req.body.order)-1
+           await ingrTypeModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
+            await ingrTypeModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})
+          
+           res.json("updated")
+       }
+   }
+   else if(req.body.direction === "down"){
+      
+        if(req.body.order>=quantity){
+            res.status(400).json("order can not be updated")   
+        }
+        else{
+            let number=Number(req.body.order)+1
+            await ingrTypeModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
+            await ingrTypeModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
+            res.json("updated")
+        }
+   }
+   else{
+       res.status(400).json("Please send correct order data")
+   }
+}
+
+exports.changeProdOrder=async (req,res,next)=>{
+    let decoded = getUser(req)
+   let quantity= await productModel.countDocuments({user_id:decoded.id})
+   .catch(err=>{
+    return res.json(err)
+})
+   if(req.body.direction === "up"){
+       if(req.body.order <= 1){
+           res.status(400).json("order can not be updated")
+       }
+       else{          
+            let number=Number(req.body.order)-1
+           await productModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
+           .catch(err=>{
+            return res.json(err)
+        })
+            await productModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})
+            .catch(err=>{
+                return res.json(err)
+            })
+          
+           res.json("updated")
+       }
+   }
+   else if(req.body.direction === "down"){
+      
+        if(req.body.order>=quantity){
+            res.status(400).json("order can not be updated")   
+        }
+        else{
+            let number=Number(req.body.order)+1
+            await productModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
+            await productModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
+            res.json("updated")
+        }
+   }
+   else{
+       res.status(400).json("Please send correct order data")
+   }
+}
+
+exports.changeProdCategoriesOrder=async(req,res,next)=>{
+    let decoded = getUser(req)
+   let quantity= await prodMenuModel.countDocuments({user_id:decoded.id})
+   if(req.body.direction === "up"){
+       if(req.body.order <= 1){
+           res.status(400).json("order can not be updated")
+       }
+       else{
+          
+            let number=Number(req.body.order)-1
+           await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
+            await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})          
+           res.json("updated")
+       }
+
+   }
+   else if(req.body.direction === "down"){
+    console.log(req.body,quantity)
+        if(req.body.order>=quantity){
+            res.status(400).json("order can not be updated")   
+        }
+        else{
+            let number=Number(req.body.order)+1
+            await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
+            await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
+            res.json("updated")
+        }
+   }
+   else{
+       res.status(400).json("Please send correct order data")
+   }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////show hide update////////////////////////////////////////////
 exports.updateIngrMenuVisiblity= async(req,res,next) =>{
     let result=await ingrModel.updateOne({_id:req.body._id},{hidden: req.body.hidden})

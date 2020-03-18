@@ -8,6 +8,7 @@ let ingrSchema=new Schema({
     default_ids:[ObjectId],
     optional_ids:[ObjectId],
     hidden:Boolean,
-    user_id:ObjectId
+    user_id:ObjectId,
+    order:Number
 })
 module.exports = mongoose.model('ingredient_type', ingrSchema);
