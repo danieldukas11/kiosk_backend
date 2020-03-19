@@ -7,12 +7,14 @@ exports.getMenu=async (req, res, next)=>{
   let id=req.headers.terminal_id
   terminalModel.findOne({_id:id},(err,terminal)=>{
     menuModel.aggregate([
-      {$match:{user_id:terminal.user_id}},
+      {$match:{$and:[{user_id:terminal.user_id},{hidden:false}]}},
+      {$sort:{order:1}},
       { $lookup: {
           from: "products",
           let: { "menu_id": "$_id" },
           pipeline: [
-            { $match: { $expr: { $in: [ "$$menu_id", "$menu_ids" ] } } },
+            { $match: {$and:[{ $expr: { $in: [ "$$menu_id", "$menu_ids" ] } },{hidden:false}]} },
+            {$sort:{order:1}},
             {
               $project:{
                 "menu_ids":0,
