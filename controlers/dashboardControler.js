@@ -613,9 +613,9 @@ exports.changeIngrCategoriesOrder=async (req,res,next)=>{
             let number=Number(req.body.order)-1
             let ingr=ingrModel.findOne({$and:[{user_id:decoded.id},{order:number}]})            
            await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
-           await ingrTypeModel.updateMany({$and:[{user_id:decoded.id},{ingredient_ids: { $in: ingr._id }}]},{$inc:{order:10}})
+           await ingrTypeModel.updateMany({$and:[{user_id:decoded.id},{ingredient_ids: { $in: ingr._id }}]},{$inc:{order:1000}})
             await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})
-            await ingrTypeModel.updateMany({$and:[{user_id:decoded.id},{ingredient_ids: { $in: req.body._id }}]},{$inc:{order:-10}})
+            await ingrTypeModel.updateMany({$and:[{user_id:decoded.id},{ingredient_ids: { $in: req.body._id }}]},{$inc:{order:-1000}})
           
            res.json("updated")
        }
@@ -630,9 +630,9 @@ exports.changeIngrCategoriesOrder=async (req,res,next)=>{
             let number=Number(req.body.order)+1
             let ingr=ingrModel.findOne({$and:[{user_id:decoded.id},{order:number}]})
             await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
-            await ingrTypeModel.updateMany({$and:[{user_id:decoded.id},{ingredient_ids: { $in: ingr._id }}]},{$inc:{order:-10}})
+            await ingrTypeModel.updateMany({$and:[{user_id:decoded.id},{ingredient_ids: { $in: ingr._id }}]},{$inc:{order:-1000}})
             await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
-            await ingrTypeModel.updateMany({$and:[{user_id:decoded.id},{ingredient_ids: { $in: req.body._id }}]},{$inc:{order:10}})
+            await ingrTypeModel.updateMany({$and:[{user_id:decoded.id},{ingredient_ids: { $in: req.body._id }}]},{$inc:{order:1000}})
             res.json("updated")
         }
    }
@@ -643,7 +643,7 @@ exports.changeIngrCategoriesOrder=async (req,res,next)=>{
 exports.changeIngrOrder=async (req,res,next)=>{
     const decoded = getUser(req)
     const category= await ingrModel.findOne({_id:req.body.menuId})
-    let prodMenuOrder=category.order * 10;
+    let prodMenuOrder=category.order * 1000;
     let quantity= await ingrTypeModel.countDocuments({$and:[{user_id:decoded.id}, {ingredient_ids: { $in: req.body.menuId }}]})    
     .catch(err=> res.status(400).json(err));  
     if(req.body.direction === "up"){
