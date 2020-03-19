@@ -611,7 +611,7 @@ exports.changeIngrCategoriesOrder=async (req,res,next)=>{
        else{
           
             let number=Number(req.body.order)-1
-            let ingr=ingrModel.findOne({$and:[{user_id:decoded.id},{order:number}]})            
+            let ingr=await ingrModel.findOne({$and:[{user_id:decoded.id},{order:number}]})            
            await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
            await ingrTypeModel.updateMany({$and:[{user_id:decoded.id},{ingredient_ids: { $in: ingr._id }}]},{$inc:{order:1000}})
             await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})
@@ -628,7 +628,7 @@ exports.changeIngrCategoriesOrder=async (req,res,next)=>{
         }
         else{
             let number=Number(req.body.order)+1
-            let ingr=ingrModel.findOne({$and:[{user_id:decoded.id},{order:number}]})
+            let ingr=await ingrModel.findOne({$and:[{user_id:decoded.id},{order:number}]})
             await ingrModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
             await ingrTypeModel.updateMany({$and:[{user_id:decoded.id},{ingredient_ids: { $in: ingr._id }}]},{$inc:{order:-1000}})
             await ingrModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
