@@ -137,12 +137,17 @@ exports.addProdMenu=async(req,res,next)=>{
     })  
     
 }
-exports.addIngredient=(req,res,next)=>{  
-    let decoded = getUser(req)
+exports.addIngredient= async (req,res,next)=>{  
+    const decoded = getUser(req);
+    const quantity= await ingrTypeModel.countDocuments({$and:[{user_id:decoded.id},{ ingredient_ids: { $in:req.body.ingredient_ids } },]});
+    const index= quantity+1
+    const category=await ingrModel.findOne({_id:req.body.ingredient_ids})
+    const order=(category.order * 1000) + index    
     let data={
         user_id:decoded.id,   
         title:req.body.title,
-        ingredient_ids:req.body.ingredient_ids
+        ingredient_ids:req.body.ingredient_ids,
+        order:order
     }
     if(req.body.price&&req.body.price!=="undefined"){
         data.price=req.body.price
@@ -158,14 +163,21 @@ exports.addIngredient=(req,res,next)=>{
     }
     ingrTypeModel.create(data,(err,ingr)=>{
         res.json(ingr);
-    })    
+    })
 
 }
 
-exports.addProduct=(req,res,next)=>{  
+exports.addProduct=async (req,res,next)=>{  
     let decoded = getUser(req)
+    const a=JSON.parse(req.body.menu_ids)
+    const quantity= await productModel.countDocuments({$and:[{user_id:decoded.id},{ menu_ids: { $in:a } },]});
+    const index= quantity+1
+    const category=await prodMenuModel.findOne({_id:a})
+    const order=(category.order * 1000) + index   
+    
        let dat={} 
        dat.title=req.body.title;
+       dat.order=order;
        if(req.file){
         dat.image=req.file.filename
        }
@@ -228,12 +240,9 @@ exports.addProduct=(req,res,next)=>{
                             }
                             else{
                                 return res.json(product)
-                            }
-                            
-
+                            }   
                         }
                     )
-
                 } 
                 else{
                     return res.json(product)
@@ -245,7 +254,6 @@ exports.addProduct=(req,res,next)=>{
             }
         })  
         //res.json("sdsds")
-
 }
 
 
