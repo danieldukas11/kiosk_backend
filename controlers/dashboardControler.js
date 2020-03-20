@@ -688,7 +688,7 @@ exports.changeIngrOrder=async (req,res,next)=>{
 exports.changeProdOrder=async (req,res,next)=>{
     const decoded = getUser(req)
     const category= await prodMenuModel.findOne({_id:req.body.menuId})
-    let prodMenuOrder=category.order * 10;
+    let prodMenuOrder=category.order * 1000;
     let quantity= await productModel.countDocuments({$and:[{user_id:decoded.id}, {menu_ids: { $in: req.body.menuId }}]})    
     .catch(err=> res.status(400).json(err));   
     console.log(req.body);
@@ -735,9 +735,9 @@ exports.changeProdCategoriesOrder=async(req,res,next)=>{
             let prod=await prodMenuModel.findOne({$and:[{user_id:decoded.id},{order:number}]})
             
            await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order})
-           let a=await productModel.updateMany({$and:[{user_id:decoded.id},{menu_ids: { $in: prod._id }}]},{$inc:{order:10}})
+           let a=await productModel.updateMany({$and:[{user_id:decoded.id},{menu_ids: { $in: prod._id }}]},{$inc:{order:1000}})
             await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number})    
-            await productModel.updateMany({$and:[{user_id:decoded.id},{menu_ids: { $in: req.body._id }}]},{$inc:{order:-10}})      
+            await productModel.updateMany({$and:[{user_id:decoded.id},{menu_ids: { $in: req.body._id }}]},{$inc:{order:-1000}})      
             console.log(a)
             res.json("updated")
        }
@@ -752,9 +752,9 @@ exports.changeProdCategoriesOrder=async(req,res,next)=>{
             let number=Number(req.body.order)+1
             let prod=await prodMenuModel.findOne({$and:[{user_id:decoded.id},{order:number}]})
             await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{order:number}]},{order:req.body.order});
-            await productModel.updateMany({$and:[{user_id:decoded.id},{menu_ids: { $in: prod._id }}]},{$inc:{order:-10}})
+            await productModel.updateMany({$and:[{user_id:decoded.id},{menu_ids: { $in: prod._id }}]},{$inc:{order:-1000}})
             await prodMenuModel.updateOne({$and:[{user_id:decoded.id},{_id:req.body._id}]},{order:number});
-            await productModel.updateMany({$and:[{user_id:decoded.id},{menu_ids: { $in: req.body._id }}]},{$inc:{order:10}})
+            await productModel.updateMany({$and:[{user_id:decoded.id},{menu_ids: { $in: req.body._id }}]},{$inc:{order:1000}})
             res.json("updated")
         }
    }
