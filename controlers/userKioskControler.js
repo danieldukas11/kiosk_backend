@@ -133,7 +133,7 @@ exports.getMenu=async (req, res, next)=>{
  
 }
 
-exports.getSpecials=(req, res, next)=>{
+/*exports.getSpecials=(req, res, next)=>{
   let id=req.headers.terminal_id
   terminalModel.findOne({_id:id},(err,terminal)=>{
     specialModel.aggregate([  
@@ -221,7 +221,7 @@ exports.getSpecials=(req, res, next)=>{
 
   })
   
-}
+}*/
 exports.login=(req, res, next)=>{
   userModel.findOne({$or:[{userName:req.body.userName},{email:req.body.userName}]},(err,user)=>{
     if(err){
@@ -262,4 +262,11 @@ exports.login=(req, res, next)=>{
     
   })
   
+}
+
+
+exports.getKioskData=async (req, res, next)=>{
+  const id=req.headers.terminal_id
+  const data=await terminalModel.findOne({_id:id})
+  res.json(data)
 }
