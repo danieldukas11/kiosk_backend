@@ -330,6 +330,8 @@ indexof
 isarray
 MIT
 
+kiosk
+
 ms
 MIT
 The MIT License (MIT)
