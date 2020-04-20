@@ -1,4 +1,5 @@
 const userModel=require("../models/user");
+const orderModel=require("../models/orders");
 const bcrypt = require('bcrypt');
 const jwt=require('jsonwebtoken');
 exports.login=(req, res, next)=>{
@@ -37,4 +38,9 @@ exports.login=(req, res, next)=>{
       
     })
     
+  }
+
+  exports.getOrders=async (req,res,next)=>{
+    let orders=await orderModel.find({user_id:req.params.user_id})
+    res.json(orders)
   }
