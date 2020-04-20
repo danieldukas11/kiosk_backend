@@ -52,8 +52,7 @@ exports.getUsers=async (req,res,next)=>{
         }
         else{
             res.json([])
-        }        
-   
+        }    
 }
 
 exports.addUser=(req,res,next)=>{    
