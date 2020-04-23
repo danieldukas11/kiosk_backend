@@ -48,7 +48,7 @@ app.get('/usr_kiosk/*', (req, res) => {
 app.get('/progress-monitor', (req, res) => {
     res.sendFile(path.join(__dirname, './progress-monitor/index.html'));
 });
-app.get('/kitchen_kiosk', (req, res) => {
+app.get('/kitchen_kiosk', (req, res) => { 
     res.sendFile(path.join(__dirname, './kitchen/index.html'));
 });
 
@@ -58,7 +58,7 @@ app.get('*', (req, res) => {
 const PORT = process.env.PORT||80 ; 
 server.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`); 
-});
+}); 
 
 
 
