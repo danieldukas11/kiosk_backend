@@ -26,21 +26,21 @@ exports.getMenu=async (req, res, next)=>{
             {
 
               $lookup:{
-                from: "ingredients",    
+                from: "specifications",    
                 let:{'prod_id':'$_id'},  
                 pipeline:[
-                  { $match: {$and:[{ $expr: { $in: [ "$$prod_id", "$product_ids" ] } },{isIngredient:false},{hidden:false}]} },
+                  { $match: {$and:[{ $expr: { $in: [ "$$prod_id", "$product_ids" ] } },{hidden:false}]} },
                   {$sort:{order:1}},
                   {
                     $lookup:{
-                      from: "ingredient_types",    
-                      let:{'ingr_cat_id':'$_id'},  
+                      from: "specification_types",    
+                      let:{'spec_cat_id':'$_id'},  
                       pipeline:[
-                        { $match: { $expr: { $and:[{$in: [ "$$ingr_cat_id", "$ingredient_ids" ]},{$in: [ "$$prod_id", "$default_ids" ]}] } } },
+                        { $match: { $expr: { $and:[{$in: [ "$$spec_cat_id", "$spec_ids" ]},{$in: [ "$$prod_id", "$default_ids" ]}] } } },
                         {
                           $project:{
                             "default_ids":0,
-                            "ingredient_ids":0,                        
+                            "spes_ids":0,                        
                           }
                         },
                       ] ,
@@ -49,14 +49,14 @@ exports.getMenu=async (req, res, next)=>{
                   },
                   {
                     $lookup:{
-                      from: "ingredient_types",    
-                      let:{'ingr_cat_id':'$_id'},  
+                      from: "specification_types",    
+                      let:{'spec_cat_id':'$_id'},  
                       pipeline:[
-                        { $match: { $expr: { $and:[{$in: [ "$$ingr_cat_id", "$ingredient_ids" ]},{$in: [ "$$prod_id", "$optional_ids" ]}] } } },
+                        { $match: { $expr: { $and:[{$in: [ "$$spec_cat_id", "$spec_ids" ]},{$in: [ "$$prod_id", "$optional_ids" ]}] } } },
                         {
                           $project:{
                             "default_ids":0,
-                            "ingredient_ids":0,                        
+                            "spec_ids":0,                        
                           }
                         },
                       ] ,
@@ -122,6 +122,7 @@ exports.getMenu=async (req, res, next)=>{
         }}    
 
   ],(err,data)=>{   
+    console.log(data)
       res.json(data)
   })
 
