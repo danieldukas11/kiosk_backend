@@ -4,6 +4,7 @@ let userSchema=new Schema({
     userName:String,
     email:String,
     password:String,
+    pin:String,
     role:String,
 })
 module.exports = mongoose.model('user', userSchema);

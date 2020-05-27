@@ -4,10 +4,10 @@ let terminalModel=require('../models/terminals');
 const userModel=require("../models/user");
 const bcrypt = require('bcrypt');
 exports.getMenu=async (req, res, next)=>{
-  let id=req.headers.terminal_id
-  terminalModel.findOne({_id:id},(err,terminal)=>{
+  let id=req.headers.user
+    userModel.findOne({_id:id},(err,user)=>{
     menuModel.aggregate([
-      {$match:{$and:[{user_id:terminal.user_id},{hidden:false}]}},
+      {$match:{$and:[{user_id:user._id},{hidden:false}]}},
       {$sort:{order:1}},
       { $lookup: {
           from: "products",
@@ -24,7 +24,6 @@ exports.getMenu=async (req, res, next)=>{
               }
             },
             {
-
               $lookup:{
                 from: "specifications",    
                 let:{'prod_id':'$_id'},  
@@ -125,12 +124,7 @@ exports.getMenu=async (req, res, next)=>{
     console.log(data)
       res.json(data)
   })
-
-
-
-  })
-  
-    
+  }) 
  
 }
 
@@ -236,19 +230,10 @@ exports.login=(req, res, next)=>{
             return
         } 
         if(pass){
-          terminalModel.findOne({$and:[{terminal_number:req.body.terminal},{user_id:user._id}]},(err,terminal)=>{
-            if(err){
-              res.status(400).json(err)
-              return
-          }
-            if(terminal){
-              res.json(terminal._id)  
-            }
-            else{
-              res.status(400).json("Mentioned terminal not found for user")
-            }
-            
-          })
+        console.log(user);
+        res.json(
+          user._id
+        )
                       
         }
         else{
@@ -265,9 +250,15 @@ exports.login=(req, res, next)=>{
   
 }
 
+exports.loginByPin=async (req, res, next)=>{
+ let user= await userModel.findOne({_id:req.headers.user})
+ 
+  console.log(user)
+}
+
 
 exports.getKioskData=async (req, res, next)=>{
-  const id=req.headers.terminal_id
+  const id=req.headers.user
   const data=await terminalModel.findOne({_id:id})
   res.json(data)
 }
