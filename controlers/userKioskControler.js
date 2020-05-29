@@ -251,9 +251,15 @@ exports.login=(req, res, next)=>{
 }
 
 exports.loginByPin=async (req, res, next)=>{
- let user= await userModel.findOne({_id:req.headers.user})
+ let user= await userModel.findOne({_id:req.headers.user});
+ let pass=await bcrypt.compare(req.body.pin, user.pin);
+ if(pass){
+  res.json(user.pin)
+ }
+ else{
+   res.status(400).json('Wrong Pin')
+ }
  
-  console.log(user)
 }
 
 
