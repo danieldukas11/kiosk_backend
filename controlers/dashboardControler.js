@@ -13,6 +13,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+const {validationResult} = require('express-validator');
+
 
 function getUser(req) {
     return jwt.verify(req.headers['authorization'], JWTKey).data;
@@ -777,6 +779,15 @@ exports.getWraps = async (req, res) => {
 };
 
 exports.addWraps = async (req, res) => {
+
+    const errors = validationResult(req);
+
+    // Handling database connection error
+    if (!errors.isEmpty()) {
+        let singleError = errors.array()[0];
+        return res.status(500).json({message: singleError});
+    }
+
     let data = req.body;
     let wrap = new WrapsModel(data);
     let result = await wrap.save();
@@ -784,10 +795,19 @@ exports.addWraps = async (req, res) => {
 };
 
 exports.updateWrap = async (req, res) => {
+
+    const errors = validationResult(req);
+
+    // Handling database connection error
+    if (!errors.isEmpty()) {
+        let singleError = errors.array()[0];
+        return res.status(500).json({message: singleError});
+    }
+
     let data = req.body;
     let wrap = await WrapsModel.findOne({_id: data._id});
     wrap.title = data.title;
-    let result = await wrap.save();
+    await wrap.save();
     this.getWraps(req, res);
 };
 

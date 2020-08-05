@@ -14,8 +14,24 @@ let socket=require("./sockets/socket")
 //     origin: 'localhost:4200',
 //     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 //   }
+
+let originsWhitelist = [
+    'http://localhost:4200',
+    'http://localhost:4202',
+    'http://localhost:4201',     //this is my front-end url for development,
+    // 'http://68.183.36.96:80',
+    // 'http://68.183.36.96',
+    // 'http://secretsouth.ie/'
+];
+let corsOptions = {
+    origin: function (origin, callback) {
+        let isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
+        callback(null, isWhitelisted);
+    },
+    credentials: true
+};
   
-  app.use(cors());
+  app.use(cors(corsOptions));
   app.use(express.static('public'));
   app.use("/", express.static( __dirname + '/kiosk-dashboard' ));
   app.use("/usr_kiosk/", express.static( __dirname + '/kiosk' ));
