@@ -6,6 +6,7 @@ let OrderSchema = new Schema({
     tax: Number,
     tip: Number,
     total: Number,
+    order_num: Number,
     status: {type: String, default: "pending"},
     orderDate: {type: Date, default: Date.now},
     code: String,

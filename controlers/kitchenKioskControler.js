@@ -44,7 +44,11 @@ exports.getUserOrders = async (req, res, next) => {
 };
 
 exports.getAllOrders = async (req, res, next) => {
-    console.log('OK')
     let orders = await orderModel.find({}).sort('orderDate');
+    res.json(orders)
+};
+
+exports.getOrdersNum = async (req, res) => {
+    let orders = await orderModel.find({}).sort('orderDate').countDocuments();
     res.json(orders)
 };

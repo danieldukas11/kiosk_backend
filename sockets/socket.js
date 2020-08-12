@@ -16,7 +16,7 @@ exports.socket = (io) => {
 
         socket.on('make_order', async (d) => {
             console.log('making order')
-            console.log(d)
+            // console.log(d)
             const order = new orderModel(d);
             await order.save();
             io.sockets.emit('get_order', d);
