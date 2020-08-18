@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="153.779" height="50.109" viewBox="0 0 153.779 50.109">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.082" y1="0.5" x2="1.053" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0.006" stop-color="#451717"/>
+      <stop offset="0.089" stop-color="#6f3927"/>
+      <stop offset="0.382" stop-color="#af6d53"/>
+      <stop offset="0.562" stop-color="#ffe7e6"/>
+      <stop offset="0.721" stop-color="#c0998a"/>
+      <stop offset="0.799" stop-color="#a0725c"/>
+      <stop offset="0.955" stop-color="#8a2e2e"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.082" y1="0.5" x2="1.053" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0.006" stop-color="#451d17"/>
+      <stop offset="0.084" stop-color="#6f4a27"/>
+      <stop offset="0.382" stop-color="#af9253"/>
+      <stop offset="0.562" stop-color="#eadabc"/>
+      <stop offset="0.793" stop-color="#a38560"/>
+      <stop offset="0.803" stop-color="#a0815c"/>
+      <stop offset="0.955" stop-color="#8a542e"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="0.082" y1="0.5" x2="1.053" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0.006" stop-color="#45091f"/>
+      <stop offset="0.089" stop-color="#6f1a10"/>
+      <stop offset="0.382" stop-color="#af402f"/>
+      <stop offset="0.562" stop-color="#ffb2c7"/>
+      <stop offset="0.719" stop-color="#c0706b"/>
+      <stop offset="0.799" stop-color="#a04d3b"/>
+      <stop offset="0.955" stop-color="#8a123e"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-4" x1="0.1" y1="0.5" x2="1.07" y2="0.5" xlink:href="#linear-gradient"/>
+    <radialGradient id="radial-gradient" cx="0.6" cy="0.471" r="0.137" gradientTransform="matrix(2.277, 0, 0, 3.145, -1.078, -1.618)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffd6a8"/>
+      <stop offset="0.102" stop-color="#cfae89"/>
+      <stop offset="0.234" stop-color="#998065"/>
+      <stop offset="0.368" stop-color="#6a5946"/>
+      <stop offset="0.5" stop-color="#44392c"/>
+      <stop offset="0.63" stop-color="#262019"/>
+      <stop offset="0.758" stop-color="#110e0b"/>
+      <stop offset="0.883" stop-color="#040302"/>
+      <stop offset="1"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="0.511" cy="0.503" r="0.134" gradientTransform="matrix(2.625, 0.086, -0.711, 3.133, -1.588, -0.673)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffd6a8"/>
+      <stop offset="0.375" stop-color="#a2886a"/>
+      <stop offset="1"/>
+    </radialGradient>
+  </defs>
+  <g id="Group_289" data-name="Group 289" transform="translate(153.779) rotate(90)">
+    <rect id="Rectangle_353" data-name="Rectangle 353" width="41.085" height="7.677" transform="translate(4.512 140.155)" fill="url(#linear-gradient)"/>
+    <path id="Path_79" data-name="Path 79" d="M21.975,0C2.864,0,0,52.5,0,52.5H43.949S41.084,0,21.975,0Z" transform="translate(3.08 0.111)" fill="url(#linear-gradient-2)"/>
+    <rect id="Rectangle_354" data-name="Rectangle 354" width="46.813" height="5.624" transform="translate(1.648 50.947)" fill="url(#linear-gradient-3)"/>
+    <rect id="Rectangle_355" data-name="Rectangle 355" width="49.306" height="87.975" transform="translate(0.401 53.786)" fill="url(#linear-gradient-4)"/>
+    <rect id="Rectangle_356" data-name="Rectangle 356" width="50.109" height="5.947" transform="translate(0 147.832)" fill="url(#linear-gradient)"/>
+    <ellipse id="Ellipse_12" data-name="Ellipse 12" cx="10.885" cy="24.782" rx="10.885" ry="24.782" transform="translate(15.272 4.992) rotate(-13.257)" fill="url(#radial-gradient)" style="mix-blend-mode: color-dodge;isolation: isolate"/>
+    <path id="Path_80" data-name="Path 80" d="M16.793,23.219C15.73,35.566,10.471,45.2,5.046,44.73S-.547,34.721.516,22.373,3.475-.452,8.9.015,17.858,10.871,16.793,23.219Z" transform="translate(8.174 6.577)" opacity="0.3" fill="url(#radial-gradient-2)" style="mix-blend-mode: color-dodge;isolation: isolate"/>
+  </g>
+</svg>
