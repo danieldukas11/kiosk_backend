@@ -19,7 +19,7 @@ exports.socket = (io) => {
             // console.log(d)
             const order = new orderModel(d);
             await order.save();
-            io.sockets.emit('get_order', d);
+            socket.broadcast.emit('get_order', d);
             // io.to(ns).emit('get_order', d)
         });
 

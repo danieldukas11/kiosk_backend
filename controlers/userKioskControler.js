@@ -143,7 +143,7 @@ exports.getMenu = async (req, res, next)=>{
         }}
 
   ],(err,data)=>{
-    console.log(data)
+    // console.log(data)
       res.json(data)
   })
   })
