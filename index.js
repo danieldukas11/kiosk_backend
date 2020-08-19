@@ -60,7 +60,7 @@ app.use(express.static('public'));
 app.use("/", express.static(__dirname + '/kiosk-dashboard'));
 app.use("/usr_kiosk/", express.static(__dirname + '/kiosk'));
 app.use("/kitchen_kiosk/", express.static(__dirname + '/kitchen_kiosk'));
-app.use("/progress_monitor/",express.static(__dirname + '/progress_monitor'));
+app.use("/progress_monitor/",express.static(path.join(__dirname + '/progress_monitor')));
 
 app.get('/kitchen_kiosk/*', (req, res) => {
     console.log('aaaa')
