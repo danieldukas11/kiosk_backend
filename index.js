@@ -60,7 +60,7 @@ app.use(express.static('public'));
 app.use("/", express.static(__dirname + '/kiosk-dashboard'));
 app.use("/usr_kiosk/", express.static(__dirname + '/kiosk'));
 app.use("/kitchen_kiosk/", express.static(__dirname + '/kitchen'));
-app.use("/progress_monitor/",express.static(__dirname + '/progress-monitor'));
+app.use("/progress_monitor/",express.static(__dirname + '/progress_monitor'));
 
 mongoose.connect('mongodb://64.225.3.114/kiosk', {
     auth: {authSource: "admin"},
