@@ -1,0 +1,35 @@
+@import '~ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
+@import '~ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
+// regular style toast
+@import '~ngx-toastr/toastr.css';
+
+body, ul {
+  margin: 0;
+  padding: 0;
+}
+
+
+ul {
+  list-style: none;
+}
+
+* {
+  outline: none;
+}
+
+.owl-carousel.owl-drag .owl-item {
+  overflow: hidden !important;
+  width: 536px !important;
+  //height: 815px;
+}
+
+
+@font-face {
+  font-family: 'Geneva Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/assets/fonts/Geneva.woff2') format('woff2'); /* Super Modern Browsers */
+  src: url('/assets/fonts/Geneva.woff') format('woff'); /* Pretty Modern Browsers */
+  src: url('/assets/fonts/Geneva Regular.ttf') format('truetype'); /* Safari, Android, iOS **/
+}
+
