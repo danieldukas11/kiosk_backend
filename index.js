@@ -44,7 +44,7 @@ let originsWhitelist = [
     'http://localhost:4203',
     'http://localhost:4201',     //this is my front-end url for development,
     // 'http://68.183.36.96:80',
-    // 'http://68.183.36.96',
+    'http://localhost',
     // 'http://secretsouth.ie/'
 ];
 let corsOptions = {
@@ -60,7 +60,7 @@ app.use(express.static('public'));
 app.use("/", express.static(__dirname + '/kiosk-dashboard'));
 app.use("/usr_kiosk/", express.static(__dirname + '/kiosk'));
 app.use("/kitchen_kiosk/", express.static(__dirname + '/kitchen'));
-app.use("/progress-monitor/", express.static(__dirname + '/progress-monitor'));
+app.use("/progress_monitor/",express.static(__dirname + '/progress-monitor'));
 
 mongoose.connect('mongodb://64.225.3.114/kiosk', {
     auth: {authSource: "admin"},
@@ -83,17 +83,21 @@ app.use("/dashboard", require('./routes/dashboard'));
 app.use("/kitchen", require('./routes/kitchen-kiosk'));
 app.use("/pay", require('./routes/pay'));
 app.get('/usr_kiosk/*', (req, res) => {
+    console.log(path.join(__dirname, './kiosk/index.html'))
     res.sendFile(path.join(__dirname, './kiosk/index.html'));
 
 });
-app.get('/progress-monitor', (req, res) => {
-    res.sendFile(path.join(__dirname, './progress-monitor/index.html'));
+app.get('/progress_monitor/*', (req, res) => {
+    console.log(path.join(__dirname, './progress_monitor/index.html'))
+    res.sendFile(path.join(__dirname, './progress_monitor/index.html'));
 });
-app.get('/kitchen_kiosk', (req, res) => {
+app.get('/kitchen_kiosk/*', (req, res) => {
+    console.log('aaaa')
     res.sendFile(path.join(__dirname, './kitchen/index.html'));
 });
 
 app.get('*', (req, res) => {
+console.log('bottom')
     res.sendFile(path.join(__dirname, './kiosk-dashboard/index.html'));
 });
 
